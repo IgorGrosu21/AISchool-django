@@ -27,7 +27,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
   objects = AuthUserManager()
   email = models.EmailField('email', primary_key=True, unique=True)
   key = models.CharField('key', default=create_key, max_length=16) #when the key is changed, all tokens are broken (for sign out of everywhere)
-  code = models.IntegerField('Код смены пароля', default=None, null=True)
+  code = models.IntegerField('Код смены пароля', default=None, blank=True, null=True)
   refresh_token = models.TextField('Refresh токен', default=None, null=True) #for user identifications on refresh
   is_staff = models.BooleanField('сотрудник', default=False) #useless for django
   is_active = models.BooleanField('активный', default=True) #useless for django
