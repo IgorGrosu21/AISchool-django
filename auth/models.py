@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -20,25 +19,15 @@ class AuthUserManager(BaseUserManager):
     })
     return self.create_user(email, password, **extra_fields)
 
-def create_key():
-  return get_random_string(16, 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
-
 class AuthUser(AbstractBaseUser, PermissionsMixin):
   objects = AuthUserManager()
   email = models.EmailField('email', primary_key=True, unique=True)
-  key = models.CharField('key', default=create_key, max_length=16) #when the key is changed, all tokens are broken (for sign out of everywhere)
-  code = models.IntegerField('Код смены пароля', default=None, blank=True, null=True)
-  refresh_token = models.TextField('Refresh токен', default=None, null=True) #for user identifications on refresh
-  is_staff = models.BooleanField('сотрудник', default=False) #useless for django
-  is_active = models.BooleanField('активный', default=True) #useless for django
+  is_staff = models.BooleanField('сотрудник', default=False) #useless. For django
+  is_active = models.BooleanField('активный', default=True) #useless. For django
   date_joined = models.DateTimeField(default=timezone.now)
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []
-  
-  def update_key(self):
-    self.key = create_key()
-    self.save()
     
   class Meta:
     verbose_name = 'Пользователь'
