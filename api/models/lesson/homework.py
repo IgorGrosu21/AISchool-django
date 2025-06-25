@@ -6,9 +6,11 @@ from ..person import Student
 
 class Homework(models.Model):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
-  specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='uploaded_homeworks', verbose_name='Конкретный урок')
+  specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='homeworks', verbose_name='Конкретный урок')
   student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homeworks', verbose_name='Ученик')
-  comment = models.CharField('Комментарий', max_length=256, blank=True, default='')
+  comment = models.CharField('Комментарий', max_length=256, blank=True)
+  last_modified = models.DateTimeField('Время', auto_now=True)
+  links = models.TextField('Ссылки', blank=True)
   
   def __str__(self):
     return f'{self.student} на {self.specific_lesson}'

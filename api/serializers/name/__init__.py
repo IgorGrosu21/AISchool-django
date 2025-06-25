@@ -1,3 +1,6 @@
 from .country import CityNameSerializer, RegionNameSerializer, CountryNameSerializer
-from .school import SchoolNameSerializer
-from .subject import SubjectNameSerializer, SubjectTypeSerializer
+from .lesson import LessonTimeNameSerializer, LessonNameSerializer, SpecificLessonNameSerializer, SpecificLessonNameForStudentSerializer, SpecificLessonNameForTeacherSerializer
+from .person import StudentNameSerializer, TeacherNameSerializer
+from .school import KlassNameSerializer, PositionNameSerializer, SchoolNameSerializer, SchoolNameWithTimeTableSerializer
+from .subject import SubjectNameSerializer
+from .user import UserNameSerializer

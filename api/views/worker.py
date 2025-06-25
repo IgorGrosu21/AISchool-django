@@ -1,5 +1,23 @@
 from rest_framework.views import APIView, Response
 from api import models
+import os
+
+def create_folders():
+  base_path = 'media/theories'
+  for subject in models.Subject.objects.all():
+    subject_dir = f'{base_path}/{subject.slug}'
+    if not os.path.exists(subject_dir):
+      os.makedirs(subject_dir)
+    for module in subject.modules.all():
+      module_dir = f'{subject_dir}/{module.slug}'
+      if not os.path.exists(module_dir):
+        os.makedirs(module_dir)
+      for topic in module.topics.all():
+        topic_dir = f'{module_dir}/{topic.slug}'
+        if not os.path.exists(topic_dir):
+          os.makedirs(topic_dir)
+        
+        
 
 # Create your views here.
 class WorkerView(APIView):

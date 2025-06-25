@@ -1,19 +1,17 @@
 from .detailed import DetailedCitySerializer
+from .detailed import DetailedLessonSerializer, DetailedSpecificLessonForStudentSerializer, DetailedSpecificLessonForTeacherSerializer
 from .detailed import DetailedStudentSerializer, DetailedTeacherSerializer
-from .detailed import DetailedKlassSerializer, DetailedSchoolSerializer
-from .detailed import DetailedUserSerializer
+from .detailed import DetailedKlassSerializer, KlassWithDiarySerializer, DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer
+from .detailed import DetailedModuleSerializer, DetailedSubjectSerializer, DetailedTopicSerializer
+from .detailed import DetailedUserSerializer, UserRoutesSerializer
 
-from .listed import CitySerializer, RegionSerializer, CountrySerializer
-from .listed import HomeworkSerializer, LessonSerializer, NoteSerializer, SpecificLessonSerializer
-from .listed import ModuleProgressSerializer, ModuleSerializer, TopicSerializer
-from .listed import BalanceSerializer, StudentSerializer, SubscriptionSerializer, TeacherSerializer
-from .listed import TaskSerializer, TheorySerializer
-from .listed import KlassSerializer, PositionSerializer, SchoolSerializer
+from .listed import LessonSerializer, HomeworkSerializer
+from .listed import SchoolSerializer
 from .listed import SubjectSerializer
-from .listed import SocialSerializer, UserSerializer
 
 from .name import CityNameSerializer, RegionNameSerializer, CountryNameSerializer
+from .name import SpecificLessonNameForStudentSerializer, SpecificLessonNameForTeacherSerializer
 from .name import SchoolNameSerializer
-from .name import SubjectNameSerializer, SubjectTypeSerializer
+from .name import SubjectNameSerializer
 
 from .media import MediaSerializer, DetailedMediaSerializer

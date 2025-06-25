@@ -1,0 +1,2 @@
+from .lesson import DetailedLessonSerializer
+from .specific_lesson import DetailedSpecificLessonForStudentSerializer, DetailedSpecificLessonForTeacherSerializer

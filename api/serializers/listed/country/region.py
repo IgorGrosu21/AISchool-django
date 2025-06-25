@@ -1,9 +1,7 @@
-from ...name import RegionNameSerializer
-
-from .country import CountrySerializer
+from ...name import RegionNameSerializer, CountryNameSerializer
 
 class RegionSerializer(RegionNameSerializer):
-  country = CountrySerializer()
+  country = CountryNameSerializer()
   
   class Meta(RegionNameSerializer.Meta):
     fields = '__all__'

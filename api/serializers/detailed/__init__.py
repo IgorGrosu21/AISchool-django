@@ -1,4 +1,6 @@
 from .country import DetailedCitySerializer
+from .lesson import DetailedLessonSerializer, DetailedSpecificLessonForStudentSerializer, DetailedSpecificLessonForTeacherSerializer
 from .person import DetailedStudentSerializer, DetailedTeacherSerializer
-from .school import DetailedKlassSerializer, DetailedSchoolSerializer
-from .user import DetailedUserSerializer
+from .school import DetailedKlassSerializer, KlassWithDiarySerializer, DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer
+from .subject import DetailedModuleSerializer, DetailedSubjectSerializer, DetailedTopicSerializer
+from .user import DetailedUserSerializer, UserRoutesSerializer

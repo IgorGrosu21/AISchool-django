@@ -3,7 +3,6 @@ from uuid import uuid4
 
 from .position import Position
 from ..country import City
-from ..subject import SubjectName
 
 class School(models.Model):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
@@ -21,7 +20,6 @@ class School(models.Model):
   emails = models.CharField('Эл. почты', max_length=128, default='', blank=True)
   website = models.URLField('Сайт', default='', blank=True)
   work_hours = models.CharField('Часы работы', max_length=16, blank=True)
-  subject_names = models.ManyToManyField(SubjectName, verbose_name='Предметы', related_name='schools', blank=True)
   
   @property
   def preview(self):
@@ -49,7 +47,7 @@ class School(models.Model):
   
   @property
   def allowed_to_edit(self):
-    return list(self.managers.values_list('teacher__user__id', flat=True))
+    return set(self.managers.values_list('teacher__user__id', flat=True)), True
   
   def __str__(self):
     return self.name

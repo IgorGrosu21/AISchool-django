@@ -1,1 +1,3 @@
-from .school import SchoolNameSerializer
+from .klass import KlassNameSerializer
+from .position import PositionNameSerializer
+from .school import SchoolNameSerializer, SchoolNameWithTimeTableSerializer

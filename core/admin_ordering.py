@@ -3,7 +3,7 @@ ADMIN_REORDER = (
     'api.City', 'api.Country', 'api.Region'
   ) },
   { 'app': 'api', 'label': 'Дневник', 'models': (
-    'api.HomeworkPhoto', 'api.Homework', 'api.Lesson', 'api.Note', 'api.SpecificLessonPhoto', 'api.SpecificLesson'
+    'api.HomeworkPhoto', 'api.Homework', 'api.LessonTime', 'api.Lesson', 'api.Note', 'api.SpecificLessonPhoto', 'api.SpecificLesson'
   ) },
   { 'app': 'api', 'label': 'Модули', 'models': (
     'api.Task', 'api.Theory', 'api.ModuleProgress', 'api.Module', 'api.Topic'

@@ -8,6 +8,3 @@ class CityNameSerializer(ModelSerializer):
   class Meta:
     fields = ['id', 'name']
     model = City
-    extra_kwargs = {
-      'name': {'required': False}
-    }

@@ -1,7 +1,6 @@
 from .country import CountryAdmin, RegionAdmin, CityAdmin
-from .lesson import HomeworkAdmin, LessonAdmin, NoteAdmin, SpecificLessonAdmin
-from .module import TaskAdmin, TheoryAdmin, ModuleProgressAdmin, ModuleAdmin, TopicAdmin
-from .person import BalanceAdmin, StudentAdmin, SubscriptionAdmin, TeacherAdmin
+from .lesson import HomeworkAdmin, LessonTimeAdmin, LessonAdmin, NoteAdmin, SpecificLessonAdmin
+from .person import StudentAdmin, SubscriptionAdmin, TeacherAdmin
 from .school import KlassAdmin, PositionAdmin, SchoolAdmin
 from .user import SocialAdmin, UserAdmin
-from .subject import SubjectNameAdmin, SubjectTypeAdmin, SubjectAdmin
+from .subject import TaskAdmin, TheoryAdmin, BalanceAdmin, ModuleAdmin, SubjectNameAdmin, SubjectTypeAdmin, SubjectAdmin, TopicAdmin

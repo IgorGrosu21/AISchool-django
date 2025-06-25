@@ -1,16 +1,14 @@
 from rest_framework.serializers import IntegerField
 
-from api.models import Student
-
 from .person import PersonSerializer
-from .balance import BalanceSerializer
+from ..subject import BalanceSerializer
 from .subscription import SubscriptionSerializer
+from ...name import StudentNameSerializer
 
-class StudentSerializer(PersonSerializer):
+class StudentSerializer(PersonSerializer, StudentNameSerializer):
   balance = BalanceSerializer(read_only=True)
   subscription = SubscriptionSerializer(read_only=True)
-  rank = IntegerField()
+  rank = IntegerField(read_only=True)
   
-  class Meta:
-    fields = ['id', 'user', 'balance', 'subscription', 'rank', 'is_manager']
-    model = Student
+  class Meta(PersonSerializer.Meta, StudentNameSerializer.Meta):
+    fields = StudentNameSerializer.Meta.fields + ['balance', 'subscription', 'rank', 'is_manager']

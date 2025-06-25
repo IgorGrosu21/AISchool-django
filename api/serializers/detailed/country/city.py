@@ -1,5 +1,6 @@
 from ...listed import CitySerializer
 
+from .region import DetailedRegionSerializer
+
 class DetailedCitySerializer(CitySerializer):
-  class Meta(CitySerializer.Meta):
-    fields = '__all__'
+  region = DetailedRegionSerializer(read_only=True)

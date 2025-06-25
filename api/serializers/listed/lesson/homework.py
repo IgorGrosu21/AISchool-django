@@ -1,12 +1,14 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, CharField, DateTimeField
 
 from api.models import Homework
 
-from ...media import MediaSerializer
+from ...media import DetailedMediaSerializer
 
 class HomeworkSerializer(ModelSerializer):
-  media = MediaSerializer(many=True)
+  id = CharField(required=False, allow_blank=True)
+  files = DetailedMediaSerializer(many=True, read_only=True)
+  last_modified = DateTimeField('%d.%m, %H:%M', read_only=True)
   
   class Meta:
-    exclude = ['id', 'specific_lesson', 'student']
+    fields = ['id', 'specific_lesson', 'student', 'comment', 'links', 'files', 'last_modified']
     model = Homework

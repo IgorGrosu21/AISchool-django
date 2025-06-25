@@ -1,0 +1,4 @@
+from .homework_photo import HomeworkPhotosView
+from .homework import DetailedHomeworkView
+from .specific_lesson_photo import SpecificLessonPhotosView
+from .specific_lesson import SpecificLessonNamesView, DetailedSpecificLessonView

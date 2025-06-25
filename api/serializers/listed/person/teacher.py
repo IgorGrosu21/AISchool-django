@@ -1,8 +1,6 @@
-from api.models import Teacher
-
 from .person import PersonSerializer
+from ...name import TeacherNameSerializer
 
-class TeacherSerializer(PersonSerializer):
-  class Meta:
-    fields = ['id', 'user']
-    model = Teacher
+class TeacherSerializer(PersonSerializer, TeacherNameSerializer):
+  class Meta(PersonSerializer.Meta, TeacherNameSerializer.Meta):
+    pass

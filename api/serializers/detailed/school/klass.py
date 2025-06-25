@@ -1,32 +1,37 @@
-from api.models import Student, Lesson
-
 from ..can_edit import CanEditSerializer
-from ...listed import StudentSerializer, LessonSerializer, KlassSerializer
+from ...listed import StudentSerializer, LessonSerializer, TeacherSerializer, KlassSerializer
+from ...name import SchoolNameWithTimeTableSerializer
+
+from ..._helpers import EditableSerializer
     
-class DetailedKlassSerializer(KlassSerializer, CanEditSerializer):
+class DetailedKlassSerializer(KlassSerializer, EditableSerializer, CanEditSerializer):
   students = StudentSerializer(many=True)
-  lessons = LessonSerializer(many=True)
+  timetable = LessonSerializer(many=True)
+  teacher = TeacherSerializer(required=False, allow_null=True)
+  school = SchoolNameWithTimeTableSerializer(read_only=True)
   
   class Meta(KlassSerializer.Meta):
-    fields = '__all__'
+    fields = KlassSerializer.Meta.fields + ['can_edit', 'teacher', 'students', 'timetable']
+    nested_fields = {
+      'one': {
+        'teacher': 'retrieve'
+      },
+      'many': {
+        'students': 'mutate',
+        'timetable': 'mutate'
+      },
+    }
+
+class KlassWithDiarySerializer(KlassSerializer, EditableSerializer, CanEditSerializer):
+  timetable = LessonSerializer(many=True, read_only=True)
+  school = SchoolNameWithTimeTableSerializer(read_only=True)
   
-  def get_students(self, validated_data):
-    students_data = validated_data.pop('students')
-    students = Student.objects.none()
-    for student_data in students_data:
-      id = student_data.pop('id')
-      students_qs = Student.objects.filter(id=id)
-      students_qs.update(is_manager=student_data.pop('is_manager'))
-      students |= students_qs
-    return students, validated_data
-  
-  def get_lessons(self, validated_data):
-    lessons_data = validated_data.pop('lessons')
-    lessons = Lesson.objects.none()
-    return lessons, validated_data
-  
-  def update(self, klass, validated_data):
-    _, validated_data = self.get_students(validated_data)
-    _, validated_data = self.get_lessons(validated_data)
+  class Meta(KlassSerializer.Meta):
+    fields = KlassSerializer.Meta.fields + ['can_edit', 'timetable']
+    nested_fields = {}
     
-    return super().update(klass, validated_data)
+class KlassWithStudentsSerializer(KlassSerializer):
+  students = StudentSerializer(many=True, read_only=True)
+  
+  class Meta(KlassSerializer.Meta):
+    fields = KlassSerializer.Meta.fields + ['students']

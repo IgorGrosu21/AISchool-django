@@ -1,16 +1,17 @@
-from rest_framework.serializers import ModelSerializer, TimeField
-
-from api.models import Lesson
-
-from ...name import SubjectNameSerializer
+from ..school import KlassSerializer
 from ..person import TeacherSerializer
+from ...name import LessonNameSerializer, LessonTimeNameSerializer
 
-class LessonSerializer(ModelSerializer):
-  subject_name = SubjectNameSerializer()
-  starting = TimeField(format='%H:%M')
-  ending = TimeField(format='%H:%M')
+class LessonSerializer(LessonNameSerializer):
+  lesson_time = LessonTimeNameSerializer()
   teacher = TeacherSerializer()
+  klass = KlassSerializer()
   
-  class Meta:
-    exclude = ['id']
-    model = Lesson
+  class Meta(LessonNameSerializer.Meta):
+    fields = LessonNameSerializer.Meta.fields + ['lesson_time']
+    nested_fields = {
+      'one': {
+        **LessonNameSerializer.Meta.nested_fields.get('one', {}),
+        'lesson_time': 'retrieve'
+      }
+    }

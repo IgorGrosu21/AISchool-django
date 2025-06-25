@@ -9,5 +9,5 @@ class SubjectSerializer(ModelSerializer):
   name = SubjectNameSerializer(read_only=True)
   
   class Meta:
-    fields = ['id', 'name', 'grade']
+    fields = ['id', 'name', 'grade', 'slug']
     model = Subject

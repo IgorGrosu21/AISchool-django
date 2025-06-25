@@ -5,15 +5,31 @@ from .specific_lesson import SpecificLesson
 from ..person import Student
 
 class Note(models.Model):
+  VALUES = {
+    'ma': 'Уважительный пропуск',
+    'ua': 'Неуважительный пропуск',
+    'da': 'Пропуск по болезни',
+    '1': '1',
+    '2': '2',
+    '3': '3',
+    '4': '4',
+    '5': '5',
+    '6': '6',
+    '7': '7',
+    '8': '8',
+    '9': '9',
+    '10': '10'
+  }
+  
   id = models.UUIDField('id', default=uuid4, primary_key=True)
-  note = models.SmallIntegerField('Оценка', default=10)
-  specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='given_notes', verbose_name='Конкретный урок')
-  student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, default=None, related_name='notes', verbose_name='Ученик')
+  value = models.CharField('Значение', choices=VALUES, max_length=2)
+  specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='notes', verbose_name='Конкретный урок')
+  student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='notes', verbose_name='Ученик')
   comment = models.CharField('Комментарий', max_length=256, blank=True, default='')
-  timestamp = models.DateTimeField('Время', auto_created=True)
+  last_modified = models.DateTimeField('Время', auto_now=True)
   
   def __str__(self):
-    return f'{self.note} для {self.student} по {self.specific_lesson}'
+    return f'{self.value} для {self.student} по {self.specific_lesson}'
   
   class Meta:
     verbose_name = 'Оценка'

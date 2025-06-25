@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'utils.pdf_middleware.AllowIframeForPDFsMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -127,6 +128,13 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'pragma',
     'expires',
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True

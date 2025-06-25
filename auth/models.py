@@ -13,6 +13,7 @@ class AuthUserManager(BaseUserManager):
 
   def create_superuser(self, email, password, **extra_fields):
     extra_fields.update({
+      'is_verified': True,
       'is_staff': True,
       'is_superuser': True,
       'is_active': True,
@@ -22,6 +23,7 @@ class AuthUserManager(BaseUserManager):
 class AuthUser(AbstractBaseUser, PermissionsMixin):
   objects = AuthUserManager()
   email = models.EmailField('email', primary_key=True, unique=True)
+  is_verified = models.BooleanField('верифицированный', default=False)
   is_staff = models.BooleanField('сотрудник', default=False) #useless. For django
   is_active = models.BooleanField('активный', default=True) #useless. For django
   date_joined = models.DateTimeField(default=timezone.now)

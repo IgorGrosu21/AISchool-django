@@ -1,2 +1,1 @@
 from .subject_name import SubjectNameSerializer
-from .subject_type import SubjectTypeSerializer

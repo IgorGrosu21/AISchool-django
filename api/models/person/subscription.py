@@ -15,7 +15,7 @@ class Subscription(models.Model):
   ending = models.DateField('Конец')
   
   def __str__(self):
-    return f'{self.plan} для {self.user}'
+    return f'{self.plan} для {self.student}'
   
   class Meta:
     verbose_name = 'Подписка'

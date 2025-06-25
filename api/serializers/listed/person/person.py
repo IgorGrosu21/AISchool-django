@@ -1,7 +1,16 @@
-from rest_framework.serializers import ModelSerializer, UUIDField
+from rest_framework.serializers import UUIDField
 
 from ..user import UserSerializer
 
-class PersonSerializer(ModelSerializer):
+from ..._helpers import EditableSerializer
+
+class PersonSerializer(EditableSerializer):
   id = UUIDField()
-  user = UserSerializer(read_only=True)
+  user = UserSerializer()
+  
+  class Meta:
+    nested_fields = {
+      'one': {
+        'user': 'mutate'
+      }
+    }

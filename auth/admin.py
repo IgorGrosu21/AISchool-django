@@ -8,10 +8,10 @@ class AuthUserAdmin(UserAdmin):
   add_form = AuthUserCreationForm
   form = AuthUserChangeForm
   model = AuthUser
-  list_display = ('email', 'is_staff', 'is_active',)
-  list_filter = ('email', 'is_staff', 'is_active',)
+  list_display = ('email', 'is_staff', 'is_verified')
+  list_filter = ('email', 'is_staff', 'is_verified',)
   fieldsets = (
-    (None, {'fields': ('email', 'password')}),
+    (None, {'fields': ('email', 'password', 'is_verified')}),
     ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
   )
   add_fieldsets = (

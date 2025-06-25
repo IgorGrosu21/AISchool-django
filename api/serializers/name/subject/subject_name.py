@@ -1,13 +1,14 @@
-from rest_framework.serializers import ModelSerializer, UUIDField
+from rest_framework.serializers import ModelSerializer, UUIDField, SerializerMethodField
 
-from api.models import SubjectName
-
-from .subject_type import SubjectTypeSerializer
+from api.models import SubjectName, Media
 
 class SubjectNameSerializer(ModelSerializer):
   id = UUIDField()
-  type = SubjectTypeSerializer(read_only=True)
+  image = SerializerMethodField()
+  
+  def get_image(self, obj: SubjectName):
+    return Media.append_prefix(f'subjects/{obj.type.name}.png')
   
   class Meta:
-    fields = ['id', 'type', 'verbose_name']
+    fields = ['id', 'image', 'verbose_name']
     model = SubjectName
