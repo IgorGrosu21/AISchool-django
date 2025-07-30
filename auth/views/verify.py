@@ -1,17 +1,23 @@
-from rest_framework.views import APIView, Response, status
+from rest_framework.views import APIView, Response, Request, status
+from rest_framework.exceptions import ParseError, NotFound
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.timezone import now
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from auth.models import AuthUser
+from drf_spectacular.utils import extend_schema
+
 from core.settings import HOST, EMAIL_HOST_USER
+from auth.models import AuthUser
 
 class SendVerificationEmailView(APIView):
-  def post(self, request, *args, **kwargs):
-    user = request.user
+  @extend_schema(tags=['auth / verify'], request=None, responses={
+    status.HTTP_204_NO_CONTENT: None
+  })
+  def post(self, request: Request, *args, **kwargs):
+    user: AuthUser = request.user
     if user.is_verified:
-      return Response({'error': 'already_verified'}, status=status.HTTP_400_BAD_REQUEST)
+      raise ParseError(code='already_verified')
 
     token = default_token_generator.make_token(user)
     verify_link = f'{HOST}/auth/verify/?pk={user.pk}&token={token}'
@@ -40,18 +46,20 @@ class VerifyDetailedUserView(APIView):
   authentication_classes = []
   permission_classes = []
   
-  def get(self, request):
-    pk = request.query_params.get('pk')
-    token = request.query_params.get('token')
+  @extend_schema(tags=['auth / verify'], request=None, responses={
+    status.HTTP_204_NO_CONTENT: None
+  })
+  def get(self, request: Request):
+    pk = request.query_params.get('pk', None)
+    token = request.query_params.get('token', None)
 
     try:
       user = AuthUser.objects.get(pk=pk)
     except AuthUser.DoesNotExist:
-      return Response({'error': 'user_doesnt_exist'}, status=status.HTTP_400_BAD_REQUEST)
+      raise NotFound(code='user_doesn\'t_exist')
 
     if default_token_generator.check_token(user, token):
       user.is_verified = True
       user.save()
       return Response(None, status=status.HTTP_204_NO_CONTENT)
-    else:
-      return Response({'error': 'invalid_token'}, status=status.HTTP_400_BAD_REQUEST)
+    raise ParseError(code='incorrect_token')

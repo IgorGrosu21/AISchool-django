@@ -1,6 +1,6 @@
 from ..user import DetailedUserSerializer
 
-from ..._helpers import EditableSerializer
+from ..._helpers import RelatedSerializer
 
-class DetailedPersonSerializer(EditableSerializer):
+class DetailedPersonSerializer(RelatedSerializer):
   user = DetailedUserSerializer()

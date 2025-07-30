@@ -1,11 +1,8 @@
-from rest_framework.serializers import UUIDField
-
 from ..user import UserSerializer
 
-from ..._helpers import EditableSerializer
+from ..._helpers import RelatedSerializer
 
-class PersonSerializer(EditableSerializer):
-  id = UUIDField()
+class PersonSerializer(RelatedSerializer):
   user = UserSerializer()
   
   class Meta:

@@ -1,3 +1,3 @@
 from .lesson_time import LessonTimeNameSerializer
 from .lesson import LessonNameSerializer
-from .specific_lesson import SpecificLessonNameSerializer, SpecificLessonNameForStudentSerializer, SpecificLessonNameForTeacherSerializer
+from .specific_lesson import SpecificLessonNameSerializer, SpecificLessonWithHomeworkSerializer

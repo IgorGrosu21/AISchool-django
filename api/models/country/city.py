@@ -8,6 +8,9 @@ class City(models.Model):
   name = models.CharField('Название', max_length=32)
   region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, verbose_name='Регион', related_name='cities')
   
+  schools: models.Manager
+  user: models.Manager
+  
   def __str__(self):
     return f'{self.region}, {self.name}'
   

@@ -6,7 +6,7 @@ from .school import School
 class SchoolPhoto(Media):
   is_preview = models.BooleanField('Является превью', default=False)
   file = models.ImageField('Файл', upload_to='schools/')
-  school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа', related_name='photos')
+  school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа', related_name='files')
   
   class Meta:
     verbose_name = 'Фотография школы'

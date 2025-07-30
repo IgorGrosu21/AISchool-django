@@ -5,17 +5,17 @@ ADMIN_REORDER = (
   { 'app': 'api', 'label': 'Дневник', 'models': (
     'api.HomeworkPhoto', 'api.Homework', 'api.LessonTime', 'api.Lesson', 'api.Note', 'api.SpecificLessonPhoto', 'api.SpecificLesson'
   ) },
-  { 'app': 'api', 'label': 'Модули', 'models': (
-    'api.Task', 'api.Theory', 'api.ModuleProgress', 'api.Module', 'api.Topic'
+  { 'app': 'api', 'label': 'Учебники', 'models': (
+    'api.Balance', 'api.Manual', 'api.Module', 'api.Task', 'api.Theory', 'api.Topic'
   ) },
   { 'app': 'api', 'label': 'Люди', 'models': (
-    'api.Balance', 'api.Student', 'api.Subscription', 'api.Teacher'
+    'api.Parent', 'api.Student', 'api.Subscription', 'api.Teacher'
   ) },
   { 'app': 'api', 'label': 'Школы', 'models': (
-    'api.Klass', 'api.Position', 'api.SchoolPhoto', 'api.School'
+    'api.Group', 'api.Klass', 'api.Position', 'api.SchoolPhoto', 'api.School'
   ) },
   { 'app': 'api', 'label': 'Предметы', 'models': (
-    'api.SubjectName', 'api.SubjectType', 'api.Subject'
+    'api.Subject', 'api.SubjectType', 
   ) },
   { 'app': 'api', 'label': 'Пользователи', 'models': (
     'api.Social', 'api.User'

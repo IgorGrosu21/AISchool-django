@@ -5,7 +5,7 @@ from api.models import User
 class CanEditSerializer(Serializer):
   can_edit = SerializerMethodField()
   
-  def get_can_edit(self, obj):
+  def get_can_edit(self, obj) -> bool:
     user: User = self.context['request'].user.user
     if not user.account.is_verified:
       return False

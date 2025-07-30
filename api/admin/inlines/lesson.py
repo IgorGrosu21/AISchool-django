@@ -1,23 +1,27 @@
 from django.contrib import admin
 
-from api.models import HomeworkPhoto, Homework, Lesson, Note, SpecificLessonPhoto
+from api.models import lesson as models
 
 class HomeworkPhotoInline(admin.TabularInline):
-  model = HomeworkPhoto
+  model = models.HomeworkPhoto
   extra = 0
 
 class HomeworkInline(admin.TabularInline):
-  model = Homework
+  model = models.Homework
   extra = 0
   
 class LessonInline(admin.TabularInline):
-  model = Lesson
+  model = models.Lesson
   extra = 0
   
 class NoteInline(admin.TabularInline):
-  model = Note
+  model = models.Note
   extra = 0
 
 class SpecificLessonPhotoInline(admin.TabularInline):
-  model = SpecificLessonPhoto
+  model = models.SpecificLessonPhoto
+  extra = 0
+
+class SpecificLessonInline(admin.TabularInline):
+  model = models.SpecificLesson
   extra = 0

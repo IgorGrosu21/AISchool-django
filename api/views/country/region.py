@@ -1,8 +1,10 @@
 from rest_framework import generics
+from drf_spectacular.utils import extend_schema
 
 from api.models import Region
 from api.serializers import RegionNameSerializer
 
+@extend_schema(tags=['api / country'])
 class RegionNamesView(generics.ListAPIView):
   authentication_classes = []
   permission_classes = []

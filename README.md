@@ -3,7 +3,7 @@
 ## Auth
 ### RefreshView
 - Token: no
-- Body: email
+- Body: refresh token
 - Return: access token
 
 ### SignUpView
@@ -16,7 +16,7 @@
 - Body: email, password
 - Return: access token
 
-### RestoreView (no email, doesn't work)
+### RestoreView
 - Token: no
 - Body: email, code, password, step (int)
 - Return: access token

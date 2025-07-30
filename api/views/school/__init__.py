@@ -1,3 +1,3 @@
-from .klass import SchoolKlassesView, DetailedKlassView, KlassWithDiaryView
+from .klass import DetailedKlassView
 from .school_photo import SchoolPhotoView
-from .school import SchoolNamesView, SchoolListView, DetailedSchoolView, SchoolTimetableView
+from .school import SchoolNamesView, SchoolListView, DetailedSchoolView, SchoolKlassesView, SchoolTimetableView

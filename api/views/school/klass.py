@@ -1,16 +1,16 @@
 from rest_framework import generics
+from drf_spectacular.utils import extend_schema
 
-from api.models import Klass, School
-from api.serializers import DetailedKlassSerializer, KlassWithDiarySerializer, SchoolWithKlassesSerializer
+from api.permisions import IsTeacherOrReadonly, CanEditKlass
+from api.models import Klass
+from api.serializers import DetailedKlassSerializer
 
-class SchoolKlassesView(generics.RetrieveUpdateAPIView):
-  queryset = School.objects.all()
-  serializer_class = SchoolWithKlassesSerializer
-
+@extend_schema(tags=['api / school'])
 class DetailedKlassView(generics.RetrieveUpdateAPIView):
   queryset = Klass.objects.all()
   serializer_class = DetailedKlassSerializer
+  permission_classes = [IsTeacherOrReadonly, CanEditKlass]
   
-class KlassWithDiaryView(generics.RetrieveAPIView):
-  queryset = Klass.objects.all()
-  serializer_class = KlassWithDiarySerializer
+  @extend_schema(exclude=True)
+  def patch(self, request, *args, **kwargs):
+    pass

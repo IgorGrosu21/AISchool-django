@@ -1,7 +1,7 @@
 from rest_framework.serializers import IntegerField
 
 from .person import PersonSerializer
-from ..subject import BalanceSerializer
+from ..manual import BalanceSerializer
 from .subscription import SubscriptionSerializer
 from ...name import StudentNameSerializer
 

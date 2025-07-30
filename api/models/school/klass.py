@@ -1,9 +1,8 @@
-from django.utils.functional import cached_property
 from django.db import models
 from uuid import uuid4
 
 from .school import School
-from ..subject import SubjectName
+from ..subject import Subject
 
 class Klass(models.Model):
   PROFILES = {
@@ -16,14 +15,18 @@ class Klass(models.Model):
   letter = models.CharField('Буква', default='A', max_length=1)
   teacher = models.OneToOneField('Teacher', on_delete=models.SET_NULL, null=True, verbose_name='Классный руководитель', related_name='klass', blank=True)
   school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='klasses', verbose_name='Школа')
-  lessons = models.ManyToManyField(SubjectName, through='Lesson', related_name='lessons', verbose_name='Уроки')
+  subjects = models.ManyToManyField(Subject, through='Lesson', verbose_name='Уроки')
   profile = models.CharField('Профиль', choices=PROFILES, default='R', max_length=1)
+  
+  lessons: models.Manager
+  students: models.Manager
+  groups: models.Manager
   
   def __str__(self):
     return f'{self.grade}{self.letter} {self.school}'
   
   @property
-  def networth(self):
+  def networth(self) -> int:
     return sum(student.balance.networth for student in self.students.exclude(balance=None))
   
   @property

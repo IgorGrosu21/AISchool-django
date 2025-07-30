@@ -1,6 +1,6 @@
 from .country import CitySerializer, RegionSerializer
-from .lesson import HomeworkSerializer, LessonTimeSerializer, LessonSerializer, NoteSerializer
-from .person import StudentSerializer, SubscriptionSerializer, TeacherSerializer
+from .lesson import HomeworkSerializer, LessonTimeSerializer, LessonSerializer, NoteSerializer, SpecificLessonSerializer
+from .manual import BalanceSerializer, ModuleWithManualSerializer, ModuleSerializer, ManualSerializer, TaskSerializer, TheorySerializer, TopicSerializer
+from .person import ParentSerializer, StudentSerializer, SubscriptionSerializer, TeacherSerializer
 from .school import KlassSerializer, PositionSerializer, SchoolSerializer
-from .subject import TaskSerializer, TheorySerializer, BalanceSerializer, ModuleWithSubjectSerializer, ModuleSerializer, SubjectSerializer, TopicSerializer
 from .user import SocialSerializer, UserSerializer

@@ -2,8 +2,9 @@ from django.db import models
 from uuid import uuid4
 
 from .lesson import Lesson
+from ..media import WithFiles
 
-class SpecificLesson(models.Model):
+class SpecificLesson(WithFiles):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
   lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='specific_lessons', verbose_name='Урок')
   date = models.DateField('Дата')
@@ -11,12 +12,15 @@ class SpecificLesson(models.Model):
   desc = models.TextField('Домашнее задание', blank=True)
   links = models.TextField('Ссылки', blank=True)
   
+  homeworks: models.Manager
+  notes: models.Manager
+  
   def __str__(self):
     return f'{self.lesson} {self.date}'
   
   @property
   def allowed_to_edit(self):
-    return self.lesson.allowed_to_edit
+    return {self.lesson.teacher.user.id} | set(self.lesson.klass.students.filter(is_manager=True).values_list('user__id'))
   
   class Meta:
     verbose_name = 'Конкретный урок'

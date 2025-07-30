@@ -1,53 +1,44 @@
-from rest_framework import status, generics
-from rest_framework.views import APIView, Response
+from rest_framework import generics
+from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
+from drf_spectacular.utils import extend_schema
+from django.db.models.manager import BaseManager
 
-from api.models import User, Student, Teacher
-from api.serializers import DetailedUserSerializer, UserRoutesSerializer, MediaSerializer
+from api.permisions import CanCreateUser
+from api.models import User, Person, Parent, Student, Teacher
+from api.serializers import DetailedUserSerializer, UserRoutesSerializer
 
-class DetailedUserView(APIView):
+from ..media import MediaView
+
+USER_TYPE_MAPPING: dict[str, BaseManager[Person]] = {
+  'parent': Parent.objects,
+  'student': Student.objects,
+  'teacher': Teacher.objects
+}
+    
+@extend_schema(tags=['api / user'])
+class DetailedUserView(RetrieveModelMixin, CreateModelMixin, MediaView):
   queryset = User.objects.all()
   serializer_class = DetailedUserSerializer
+  media_field = 'avatar'
+  permission_classes = [CanCreateUser]
+  
+  def get_object(self) -> User:
+    return self.request.user.user
   
   def get(self, request, *args, **kwargs):
-    user: User = request.user.user
-    serializer = self.serializer_class(user, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return self.retrieve(request, *args, **kwargs)
 
   def post(self, request, *args, **kwargs):
-    user, created = User.objects.get_or_create(account=request.user)
-    data = request.data
-    data.pop('id')
-    is_teacher = data.pop('is_teacher')
-    serializer = self.serializer_class(user, data=data)
-    if serializer.is_valid():
-      user = serializer.save()
-      manager = Teacher.objects if is_teacher else Student.objects
-      if is_teacher:
-        if created or not manager.filter(user=user).exists():
-          manager.create(user=user)
-      else:
-        if created or not manager.filter(user=user).exists():
-          manager.create(user=user)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    if created:
-      user.delete()
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def patch(self, request, *args, **kwargs):
-    user: User = request.user.user
-    serializer = MediaSerializer(user.avatar, data=request.data)
-    if serializer.is_valid():
-      avatar = serializer.validated_data.get('file')
-      user.avatar = avatar
-      user.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def delete(self, request, *args, **kwargs):
-    user = request.user.user
-    user.avatar.delete()
-    return Response(None, status=status.HTTP_204_NO_CONTENT)
-  
+    return self.create(request, *args, **kwargs)
+
+  def perform_create(self, serializer: DetailedUserSerializer):
+    user_type = self.request.data.pop('type')
+    user = serializer.save(account=self.request.user)
+    manager = USER_TYPE_MAPPING[user_type]
+    if not manager.filter(user=user).exists():
+      manager.create(user=user)
+
+@extend_schema(tags=['api / user'])
 class UserRoutesView(generics.RetrieveAPIView):
   queryset = User.objects.all()
   serializer_class = UserRoutesSerializer

@@ -1,14 +1,11 @@
-from rest_framework.serializers import CharField
-
 from api.models import Position
 
 from ..person import TeacherSerializer
 from ...name import SchoolNameSerializer, PositionNameSerializer
 
-from ..._helpers import EditableSerializer
+from ..._helpers import RelatedSerializer, CreatableSerializer
 
-class PositionSerializer(PositionNameSerializer, EditableSerializer):
-  id = CharField(allow_blank=True, required=False)
+class PositionSerializer(PositionNameSerializer, RelatedSerializer, CreatableSerializer):
   teacher = TeacherSerializer()
   school = SchoolNameSerializer()
   

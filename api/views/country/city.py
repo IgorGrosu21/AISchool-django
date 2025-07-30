@@ -1,8 +1,10 @@
 from rest_framework import generics
+from drf_spectacular.utils import extend_schema
 
 from api.models import City
 from api.serializers import CityNameSerializer, DetailedCitySerializer
 
+@extend_schema(tags=['api / country'])
 class CityNamesView(generics.ListAPIView):
   authentication_classes = []
   permission_classes = []
@@ -14,7 +16,8 @@ class CityNamesView(generics.ListAPIView):
     region = self.kwargs.get('region_pk')
     return self.queryset.filter(region=region)
 
-class CityView(generics.RetrieveAPIView):
+@extend_schema(tags=['api / country'])
+class DetailedCityView(generics.RetrieveAPIView):
   queryset = City.objects.all()
   serializer_class = DetailedCitySerializer
   

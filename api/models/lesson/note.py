@@ -31,6 +31,14 @@ class Note(models.Model):
   def __str__(self):
     return f'{self.value} для {self.student} по {self.specific_lesson}'
   
+  @property
+  def homework(self):
+    from .homework import Homework
+    homework_qs: models.QuerySet[Homework] = self.specific_lesson.homeworks.filter(student=self.student)
+    if homework_qs.exists():
+      return homework_qs.first()
+    return None
+  
   class Meta:
     verbose_name = 'Оценка'
     verbose_name_plural = 'Оценки'

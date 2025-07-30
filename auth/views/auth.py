@@ -1,6 +1,5 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import generics
+from drf_spectacular.utils import extend_schema
 from auth.models import AuthUser
 from auth.serializers import SignUpSerializer, LoginSerializer
 
@@ -9,17 +8,10 @@ class AuthView(generics.CreateAPIView):
   authentication_classes = []
   permission_classes = []
   
-  def create(self, request, *args, **kwargs):
-    serializer = self.serializer_class(data=request.data, context={'request': request})
-    if serializer.is_valid():
-      user = serializer.save()
-      refresh = RefreshToken.for_user(user)
-      access = refresh.access_token
-      return Response({'access': str(access), 'refresh': str(refresh)}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+@extend_schema(tags=['auth / auth'])
 class SignUpView(AuthView):
   serializer_class = SignUpSerializer
 
+@extend_schema(tags=['auth / auth'])
 class LoginView(AuthView):
   serializer_class = LoginSerializer

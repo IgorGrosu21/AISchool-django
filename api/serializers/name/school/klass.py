@@ -1,12 +1,8 @@
-from rest_framework.serializers import CharField
-
 from api.models import Klass
 
-from ..._helpers import EditableSerializer
+from ..._helpers import CreatableSerializer
 
-class KlassNameSerializer(EditableSerializer):
-  id = CharField(allow_blank=True, required=False)
-  
+class KlassNameSerializer(CreatableSerializer):
   class Meta:
     fields = ['id', 'grade', 'letter', 'profile', 'school']
     model = Klass

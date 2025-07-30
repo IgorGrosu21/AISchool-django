@@ -1,15 +1,19 @@
 from django.contrib import admin
 
-from api.models import Klass, SchoolPhoto, Position
+from api.models import school as models
+
+class GroupInline(admin.TabularInline):
+  model = models.Group
+  extra = 0
 
 class KlassInline(admin.TabularInline):
-  model = Klass
+  model = models.Klass
   extra = 0
 
 class SchoolPhotoInline(admin.TabularInline):
-  model = SchoolPhoto
+  model = models.SchoolPhoto
   extra = 0
   
 class PositionInline(admin.TabularInline):
-  model = Position
+  model = models.Position
   extra = 0

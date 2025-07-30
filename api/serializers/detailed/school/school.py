@@ -1,13 +1,11 @@
-from api.models import School
-
 from ..can_edit import CanEditSerializer
 from ...media import DetailedMediaSerializer
 from ...name import KlassNameSerializer, SchoolNameWithTimeTableSerializer
 from ...listed import PositionSerializer, SchoolSerializer, LessonTimeSerializer
 
-from ..._helpers import EditableSerializer
+from ..._helpers import RelatedSerializer
 
-class DetailedSchoolSerializer(SchoolSerializer, EditableSerializer, CanEditSerializer):
+class DetailedSchoolSerializer(SchoolSerializer, RelatedSerializer, CanEditSerializer):
   staff = PositionSerializer(many=True)
   photos = DetailedMediaSerializer(many=True, read_only=True)
   
@@ -19,7 +17,7 @@ class DetailedSchoolSerializer(SchoolSerializer, EditableSerializer, CanEditSeri
       },
     }
     
-class SchoolWithKlassesSerializer(EditableSerializer, CanEditSerializer):
+class SchoolWithKlassesSerializer(RelatedSerializer, CanEditSerializer):
   klasses = KlassNameSerializer(many=True)
   
   class Meta(SchoolSerializer.Meta):
@@ -30,7 +28,7 @@ class SchoolWithKlassesSerializer(EditableSerializer, CanEditSerializer):
       },
     }
     
-class SchoolWithTimetableSerializer(EditableSerializer, SchoolNameWithTimeTableSerializer, CanEditSerializer):
+class SchoolWithTimetableSerializer(RelatedSerializer, SchoolNameWithTimeTableSerializer, CanEditSerializer):
   klasses = KlassNameSerializer(many=True, read_only=True)
   timetable = LessonTimeSerializer(many=True)
   

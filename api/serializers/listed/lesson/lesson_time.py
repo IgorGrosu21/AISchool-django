@@ -1,12 +1,8 @@
-from rest_framework.serializers import CharField
-
-from api.models import School
-
 from ...name import LessonNameSerializer, LessonTimeNameSerializer
 
-from ..._helpers import EditableSerializer
+from ..._helpers import RelatedSerializer
 
-class LessonTimeSerializer(LessonTimeNameSerializer, EditableSerializer):
+class LessonTimeSerializer(LessonTimeNameSerializer, RelatedSerializer):
   lessons = LessonNameSerializer(many=True)
   
   class Meta(LessonTimeNameSerializer.Meta):

@@ -1,14 +1,32 @@
 from django.contrib.auth import authenticate
-from rest_framework.serializers import ModelSerializer, CharField, ValidationError
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, ValidationError, SerializerMethodField
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import AuthUser
 
+class AccessTokenSerializer(Serializer):
+  access = CharField(read_only=True)
+
+#auth
 class AuthSerializer(ModelSerializer):
-  email = CharField(validators=[])
+  email = CharField(validators=[], write_only=True)
   password = CharField(write_only=True)
+  access = SerializerMethodField()
+  refresh = SerializerMethodField()
+  
+  def create_tokens(self, user: AuthUser):
+    refresh = RefreshToken.for_user(user)
+    self._tokens = { 'access': str(refresh.access_token), 'refresh': str(refresh) }
+    return user
+  
+  def get_access(self, _) -> str:
+    return self._tokens.get('access', '')
+  
+  def get_refresh(self, _) -> str:
+    return self._tokens.get('refresh', '')
   
   class Meta:
     model = AuthUser
-    fields = ['email', 'password']
+    fields = ['email', 'password', 'access', 'refresh']
 
 class SignUpSerializer(AuthSerializer):
   def validate_email(self, value: str):
@@ -26,7 +44,8 @@ class SignUpSerializer(AuthSerializer):
     return value
   
   def create(self, validated_data):
-    return AuthUser.objects.create_user(**validated_data)
+    user = AuthUser.objects.create_user(**validated_data)
+    return self.create_tokens(user)
   
 class LoginSerializer(AuthSerializer):
   def validate_email(self, value: str):
@@ -46,4 +65,5 @@ class LoginSerializer(AuthSerializer):
       return value
   
   def create(self, validated_data):
-    return AuthUser.objects.get(email=validated_data.get('email'))
+    user = AuthUser.objects.get(email=validated_data.get('email'))
+    return self.create_tokens(user)

@@ -3,8 +3,10 @@ from uuid import uuid4
 
 from auth.models import AuthUser
 from ..country import City
+from .user_logic import UserLogic
+from .user_routes import UserRoutes
 
-class User(models.Model):
+class User(models.Model, UserLogic, UserRoutes):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
   account = models.OneToOneField(AuthUser, on_delete=models.CASCADE, unique=True, related_name='user')
   name = models.CharField('Имя', max_length=16)
@@ -14,24 +16,10 @@ class User(models.Model):
   avatar = models.ImageField('Аватар', blank=True, upload_to='avatars/')
   is_verified = models.BooleanField('Верифицированный', default=False)
   
+  socials: models.Manager
+  
   def __str__(self):
     return self.name + ' ' + self.surname if self.name else str(self.id)
-  
-  @property
-  def student(self):
-    return self.student_account if hasattr(self, 'student_account') else None
-  
-  @property
-  def teacher(self):
-    return self.teacher_account if hasattr(self, 'teacher_account') else None
-  
-  @property
-  def is_teacher(self):
-    return self.teacher != None
-  
-  @property
-  def is_student(self):
-    return self.student != None
   
   @property
   def allowed_to_edit(self):

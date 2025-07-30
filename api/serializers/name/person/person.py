@@ -1,7 +1,6 @@
-from rest_framework.serializers import ModelSerializer, UUIDField
+from rest_framework.serializers import ModelSerializer
 
 from ..user import UserNameSerializer
 
 class PersonNameSerializer(ModelSerializer):
-  id = UUIDField()
-  user = UserNameSerializer()
+  user = UserNameSerializer(read_only=True)

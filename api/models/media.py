@@ -4,6 +4,7 @@ from core.settings import HOST
 
 class Media(models.Model):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
+  file: models.FileField
   
   @staticmethod
   def append_prefix(path):
@@ -14,6 +15,12 @@ class Media(models.Model):
   
   def __str__(self):
     return self.file.name
+  
+  class Meta:
+    abstract = True
+    
+class WithFiles(models.Model):
+  files: models.QuerySet[Media]
   
   class Meta:
     abstract = True

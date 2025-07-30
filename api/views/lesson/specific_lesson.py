@@ -1,83 +1,104 @@
 from datetime import datetime
-from rest_framework import generics, status
-from rest_framework.views import Response
+from rest_framework import generics, mixins, status, exceptions
+from rest_framework.views import Response, Request
+from drf_spectacular.utils import extend_schema
+from django.shortcuts import get_object_or_404
 
-from api.models import User, SpecificLesson, Lesson, Klass
-from api.serializers import SpecificLessonNameForStudentSerializer, SpecificLessonNameForTeacherSerializer
-from api.serializers import DetailedSpecificLessonForStudentSerializer, DetailedSpecificLessonForTeacherSerializer
-from api.serializers import LessonSerializer, DetailedLessonSerializer
+from api.permisions import IsKlassManagerOrReadonly, IsTeacherOrReadonly, CanEditSpecificLesson
+from api.models import SpecificLesson, Lesson, Klass, Student, Teacher
+from api.serializers import SpecificLessonNameSerializer, SpecificLessonWithHomeworkSerializer
+from api.serializers import LessonSerializer, StudentSerializer, DetailedSpecificLessonSerializer
 
+@extend_schema(tags=['api / lesson'])
 class SpecificLessonNamesView(generics.ListAPIView):
   queryset = SpecificLesson.objects.all()
   
   def get_serializer_class(self):
-    user: User = self.request.user.user
-    if user.is_student:
-      return SpecificLessonNameForStudentSerializer
-    else:
-      return SpecificLessonNameForTeacherSerializer
+    if self.request.user.is_anonymous:
+      return SpecificLessonNameSerializer
+  
+    account_type = self.get_account_type()
+    if account_type == 'student':
+      return SpecificLessonWithHomeworkSerializer
+    return SpecificLessonNameSerializer
+  
+  def get_account_type(self) -> str:
+    account_type = self.kwargs.get('account_type', '')
+    allowed_types = ['teacher', 'student']
+    if account_type in allowed_types:
+      return account_type
+    raise exceptions.ParseError(code='invalid_account_type')
+  
+  def get_person(self):
+    account_type = self.get_account_type()
+    pk = self.kwargs.get('person_pk')
+    model = Teacher
+    if account_type == 'student':
+      model = Student
+    return get_object_or_404(model, pk=pk)
   
   def get_queryset(self):
     start_str, end_str = self.kwargs.get('date_range').split('-')
-    try:
-      klass = Klass.objects.get(school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
-      start_date = datetime.strptime(start_str, '%Y.%m.%d').date()
-      end_date = datetime.strptime(end_str, '%Y.%m.%d').date()
-      return self.queryset.filter(lesson__klass=klass, date__gte=start_date, date__lte=end_date)
-    except:
-      return self.queryset.none()
+    start_date = datetime.strptime(start_str, '%Y.%m.%d').date()
+    end_date = datetime.strptime(end_str, '%Y.%m.%d').date()
+    person = self.get_person()
+    lessons_ids = person.lessons.values_list('id', flat=True)
+    return self.queryset.filter(lesson__id__in=lessons_ids, date__gte=start_date, date__lte=end_date)
     
-class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView):
+@extend_schema(tags=['api / lesson'])
+class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
+  permission_classes = [IsKlassManagerOrReadonly|IsTeacherOrReadonly, CanEditSpecificLesson]
   queryset = SpecificLesson.objects.all()
-  
-  def get_serializer_class(self):
-    user: User = self.request.user.user
-    if user.is_student:
-      return DetailedSpecificLessonForStudentSerializer
-    else:
-      return DetailedSpecificLessonForTeacherSerializer
+  serializer_class = DetailedSpecificLessonSerializer
   
   def get_lesson(self):
-    klass = Klass.objects.get(school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
-    return Lesson.objects.get(klass=klass, id=self.kwargs.get('lesson'))
+    klass = get_object_or_404(Klass, school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
+    return get_object_or_404(Lesson, klass=klass, id=self.kwargs.get('lesson'))
   
   def get_date(self):
     return datetime.strptime(self.kwargs.get('date'), '%Y.%m.%d').date()
   
   def get_object(self):
-    specific_lessons_qs = SpecificLesson.objects.filter(lesson=self.get_lesson(), date=self.get_date())
-    if specific_lessons_qs.exists():
-      return specific_lessons_qs.first()
-    return None
+    specific_lesson = None
+    try:
+      specific_lesson = SpecificLesson.objects.get(lesson=self.get_lesson(), date=self.get_date())
+    finally:
+      self.check_object_permissions(self.request, specific_lesson)
+    return specific_lesson
   
-  def get(self, request, *args, **kwargs):
+  def get(self, request: Request, *args, **kwargs):
     instance = self.get_object()
     if instance:
-      return super().get(request, *args, **kwargs)
-    user: User = request.user.user
-    data = { 'id': '', 'date': self.kwargs.get('date'), 'desc': '', 'title': '', 'photos': [] }
+      return self.retrieve(request, *args, **kwargs)
     lesson = self.get_lesson()
-    if user.is_student:
-      lesson_serializer_class = LessonSerializer
-      data = { **data, 'note': None, 'homework': None }
-    else:
-      lesson_serializer_class = DetailedLessonSerializer
-      data = { **data, 'notes': [], 'homeworks': [] }
-    return Response({ **data, 'lesson': lesson_serializer_class(lesson).data, 'can_edit': user.is_teacher }, status=status.HTTP_200_OK)
+    data = {
+      'id': '',
+      'date': kwargs.get('date'),
+      'lesson': LessonSerializer(lesson).data,
+      'desc': '',
+      'title': '',
+      'files': [],
+      'links': '',
+      'students': StudentSerializer(lesson.students, many=True).data,
+      'notes': [],
+      'homeworks': []
+    }
+    return Response(data, status=status.HTTP_200_OK)
   
-  def put(self, request, *args, **kwargs):
+  def put(self, request: Request, *args, **kwargs):
     instance = self.get_object()
     if instance:
-      return super().put(request, *args, **kwargs)
-    instance = SpecificLesson.objects.create(lesson=self.get_lesson(), date=self.get_date())
-    data = {key: value for key, value in request.data.items() if key != 'id'}
-    for raw_note in data.get('notes', []):
-      raw_note['specific_lesson'] = str(instance.id)
-    serializer = self.get_serializer_class()(instance, data=data, context={'request': request})
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-      instance.delete()
-    return Response(None, status=status.HTTP_400_BAD_REQUEST)
+      return self.update(request, *args, **kwargs)
+    raw_notes = request.data.pop('notes', [])
+    response = self.create(request, *args, **kwargs)
+    if len(raw_notes) > 0:
+      for raw_note in raw_notes:
+        raw_note['specific_lesson'] = str(instance.id)
+      setattr(self.request, 'data', {'notes': raw_notes})
+      return self.partial_update(self.request)
+    return response
+  
+  @extend_schema(exclude=True)
+  def patch(self, request, *args, **kwargs):
+    pass
     

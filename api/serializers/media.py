@@ -1,4 +1,4 @@
-from rest_framework.serializers import Serializer, UUIDField, ImageField, FileField
+from rest_framework.serializers import Serializer, CharField, ImageField, FileField
 
 from api.models import Media
 
@@ -9,7 +9,7 @@ class MediaSerializer(Serializer):
     return instance.get_absolute_url()
 
 class DetailedMediaSerializer(Serializer):
-  id = UUIDField(required=False)
+  id = CharField(allow_blank=True, required=False)
   file = FileField()
   
   def to_representation(self, instance: Media):

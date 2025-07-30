@@ -1,2 +1,2 @@
-from .klass import DetailedKlassSerializer, KlassWithDiarySerializer, KlassWithStudentsSerializer
+from .klass import DetailedKlassSerializer
 from .school import DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer

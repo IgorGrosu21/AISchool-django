@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
 
 class AuthUserManager(BaseUserManager):
+  model: type['AuthUser']
+  
   def create_user(self, email, password, **extra_fields):
     email = self.normalize_email(email)
     user = self.model(email=email, **extra_fields)
@@ -23,14 +25,14 @@ class AuthUserManager(BaseUserManager):
 class AuthUser(AbstractBaseUser, PermissionsMixin):
   objects = AuthUserManager()
   email = models.EmailField('email', primary_key=True, unique=True)
-  is_verified = models.BooleanField('верифицированный', default=False)
-  is_staff = models.BooleanField('сотрудник', default=False) #useless. For django
-  is_active = models.BooleanField('активный', default=True) #useless. For django
+  is_verified = models.BooleanField('верифицированный', default=False) # type: ignore
+  is_staff = models.BooleanField('сотрудник', default=False) # type: ignore
+  is_active = models.BooleanField('активный', default=True) # type: ignore
   date_joined = models.DateTimeField(default=timezone.now)
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []
-    
+  
   class Meta:
     verbose_name = 'Пользователь'
     verbose_name_plural = 'Пользователи'

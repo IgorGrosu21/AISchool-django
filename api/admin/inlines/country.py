@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from api.models import Region, City
+from api.models import country as models
 
 class RegionInline(admin.TabularInline):
-  model = Region
+  model = models.Region
   extra = 0
   
 class CityInline(admin.TabularInline):
-  model = City
+  model = models.City
   extra = 0

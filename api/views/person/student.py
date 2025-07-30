@@ -1,8 +1,10 @@
-from rest_framework import generics
-
+from api.permisions import IsStudentOrReadonly, IsSelfOrReadonly
 from api.models import Student
 from api.serializers import DetailedStudentSerializer
 
-class DetailedStudentView(generics.RetrieveUpdateAPIView):
+from .person import DetailedPersonView
+
+class DetailedStudentView(DetailedPersonView):
   queryset = Student.objects.all()
   serializer_class = DetailedStudentSerializer
+  permission_classes = [IsStudentOrReadonly, IsSelfOrReadonly]

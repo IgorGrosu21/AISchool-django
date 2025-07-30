@@ -7,8 +7,8 @@ from ..subject import SubjectNameSerializer
 
 class PositionNameSerializer(ModelSerializer):
   teacher = TeacherNameSerializer()
-  subject_names = SubjectNameSerializer(many=True)
+  subjects = SubjectNameSerializer(many=True)
   
   class Meta:
-    fields = ['teacher', 'subject_names']
+    fields = ['teacher', 'subjects']
     model = Position

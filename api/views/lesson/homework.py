@@ -1,39 +1,54 @@
 from datetime import datetime
 from rest_framework import generics, status
-from rest_framework.views import Response
+from rest_framework.views import Response, Request
+from drf_spectacular.utils import extend_schema
+from django.shortcuts import get_object_or_404
 
-from api.models import User, Homework, SpecificLesson, Lesson, Klass
-from api.serializers import HomeworkSerializer, DetailedMediaSerializer
-
-class DetailedHomeworkView(generics.UpdateAPIView, generics.DestroyAPIView):
+from api.permisions import IsStudentOrReadonly, CanEditHomework
+from api.models import Student, Homework, SpecificLesson, Lesson, Klass
+from api.serializers import DetailedHomeworkSerializer, StudentSerializer, SpecificLessonSerializer
+    
+@extend_schema(tags=['api / lesson'])
+class DetailedHomeworkView(generics.RetrieveUpdateDestroyAPIView):
+  permission_classes = [IsStudentOrReadonly, CanEditHomework]
   queryset = Homework.objects.all()
-  serializer_class = HomeworkSerializer
-  photo_serializer_class = DetailedMediaSerializer
+  serializer_class = DetailedHomeworkSerializer
   
   def get_lesson(self):
-    klass = Klass.objects.get(school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
-    return Lesson.objects.get(klass=klass, id=self.kwargs.get('lesson'))
-  
-  def get_date(self):
-    return datetime.strptime(self.kwargs.get('date'), '%Y.%m.%d').date()
+    klass = get_object_or_404(Klass, school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
+    return get_object_or_404(Lesson, klass=klass, id=self.kwargs.get('lesson'))
   
   def get_specific_lesson(self):
-    return SpecificLesson.objects.get(lesson=self.get_lesson(), date=self.get_date())
+    return get_object_or_404(SpecificLesson, lesson=self.get_lesson(), id=self.kwargs.get('specific_lesson'))
+  
+  def get_student(self):
+    return get_object_or_404(Student, id=self.kwargs.get('student'))
   
   def get_object(self):
-    user: User = self.request.user.user
-    if user.is_student:
-      homework_qs = Homework.objects.filter(student=user.student, specific_lesson=self.get_specific_lesson())
-      if homework_qs.exists():
-        return homework_qs.first()
-    return None
+    homework = None
+    try:
+      homework = Homework.objects.get(student=self.get_student(), specific_lesson=self.get_specific_lesson())
+    finally:
+      self.check_object_permissions(self.request, homework)
+    return homework
   
-  def put(self, request, *args, **kwargs):
-    if self.get_object():
-      return super().put(request, *args, **kwargs)
-    data = {key: value for key, value in request.data.items() if key != 'id'}
-    serializer = self.serializer_class(data=data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  def get(self, request: Request, *args, **kwargs):
+    instance = self.get_object()
+    if instance:
+      return self.retrieve(request, *args, **kwargs)
+    student = self.get_student()
+    specific_lesson = self.get_specific_lesson()
+    data = {
+      'id': '',
+      'student': StudentSerializer(student).data,
+      'comment': '',
+      'links': '',
+      'files': [],
+      'last_modified': str(datetime.now()),
+      'specific_lesson': SpecificLessonSerializer(specific_lesson).data
+    }
+    return Response(data, status=status.HTTP_200_OK)
+  
+  @extend_schema(exclude=True)
+  def patch(self, request, *args, **kwargs):
+    pass

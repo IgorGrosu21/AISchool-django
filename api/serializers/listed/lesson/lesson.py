@@ -8,7 +8,6 @@ class LessonSerializer(LessonNameSerializer):
   klass = KlassSerializer()
   
   class Meta(LessonNameSerializer.Meta):
-    fields = LessonNameSerializer.Meta.fields + ['lesson_time']
     nested_fields = {
       'one': {
         **LessonNameSerializer.Meta.nested_fields.get('one', {}),

@@ -3,11 +3,12 @@ from uuid import uuid4
 
 from .position import Position
 from ..country import City
+from ..media import WithFiles
 
-class School(models.Model):
+class School(WithFiles):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
   name = models.CharField('Название', max_length=64)
-  positions = models.ManyToManyField('Teacher', through=Position, verbose_name='Позиции', related_name='schools')
+  teachers = models.ManyToManyField('Teacher', through=Position, verbose_name='Позиции', related_name='schools')
   city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, verbose_name='Город', related_name='schools')
   address = models.CharField('Адрес', max_length=64)
   lang = models.CharField('Язык', blank=True, max_length=2)
@@ -21,17 +22,21 @@ class School(models.Model):
   website = models.URLField('Сайт', default='', blank=True)
   work_hours = models.CharField('Часы работы', max_length=16, blank=True)
   
+  timetable: models.Manager
+  klasses: models.Manager
+  staff: models.Manager
+  
   @property
   def preview(self):
-    return self.photos.filter(is_preview=True).first()
+    return self.files.filter(is_preview=True).first()
   
   @preview.setter
   def preview(self, file):
-    preview_qs = self.photos.filter(is_preview=True)
+    preview_qs = self.files.filter(is_preview=True)
     if preview_qs.exists():
       preview_qs.update(file=file)
     else:
-      self.photos.create(is_preview=True, file=file, school=self)
+      self.files.create(is_preview=True, file=file, school=self)
   
   @property
   def managers(self):

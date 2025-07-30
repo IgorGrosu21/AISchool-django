@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, UUIDField
+from rest_framework.serializers import ModelSerializer
 
 from api.models import School
 
@@ -8,7 +8,6 @@ from ..lesson import LessonTimeNameSerializer
 from .position import PositionNameSerializer
 
 class SchoolNameSerializer(ModelSerializer):
-  id = UUIDField()
   city = CityNameSerializer(read_only=True)
   preview = MediaSerializer(read_only=True)
   

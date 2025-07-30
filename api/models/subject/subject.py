@@ -1,22 +1,25 @@
 from django.db import models
 from uuid import uuid4
 
-from .subject_name import SubjectName
+from .subject_type import SubjectType
+from ..media import Media
 
 class Subject(models.Model):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
-  name = models.ForeignKey(SubjectName, on_delete=models.CASCADE, verbose_name='Название', related_name='subjects')
-  grade = models.SmallIntegerField('Класс', default=5)
-  slug = models.SlugField('Слаг', max_length=64, unique=True, db_index=True)
+  type = models.ForeignKey(SubjectType, on_delete=models.CASCADE, verbose_name='Тип', related_name='subjects')
+  verbose_name = models.CharField('Читаемое название', blank=True, max_length=48)
+  lang = models.CharField('Язык', max_length=2, blank=True)
+  
+  manuals: models.Manager
   
   def __str__(self):
-    return f'{self.grade} {self.name}'
+    return f'{self.verbose_name if self.verbose_name else self.type} ({self.lang})'
   
   @property
-  def priceables_count(self):
-    return sum(module.priceables_count for module in self.modules.all())
+  def image(self):
+    return Media.append_prefix(f'subjects/{self.type.name}.png')
   
   class Meta:
-    ordering = ['grade', 'name']
-    verbose_name = 'Предмет'
-    verbose_name_plural = 'Предметы'
+    ordering = ['lang', 'type__country', 'type__name']
+    verbose_name = 'Название предмета'
+    verbose_name_plural = 'Названия предметов'

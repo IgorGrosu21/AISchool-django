@@ -1,42 +1,18 @@
-from rest_framework import generics, status
-from rest_framework.views import Response
+from drf_spectacular.utils import extend_schema
+from django.shortcuts import get_object_or_404
 
-from api.models import School, SchoolPhoto
-from api.serializers import DetailedMediaSerializer
+from api.permisions import IsSchoolManagerOrReadonly, CanEditSchool
+from api.models import School
 
-class SchoolPhotoView(generics.UpdateAPIView, generics.DestroyAPIView):
-  queryset = SchoolPhoto.objects.all()
-  serializer_class = DetailedMediaSerializer
+from ..media import DetailedMediaView
+
+@extend_schema(tags=['api / school'])
+class SchoolPhotoView(DetailedMediaView):
+  permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
+  container_field = 'school'
   
-  def put(self, request, school_pk, pk = None, *args, **kwargs):
-    if pk:
-      return self.patch(request, school_pk, pk, *args, **kwargs)
-    
-    school = School.objects.get(pk=school_pk)
-    serializer = self.serializer_class(data=request.data)
-    if serializer.is_valid():
-      file = serializer.validated_data.get('file')
-      school_photo = SchoolPhoto.objects.create(file=file, school=school)
-      serializer = self.serializer_class(school_photo)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def patch(self, request, school_pk, pk = None, *args, **kwargs):
-    if not pk:
-      return self.put(request, school_pk, pk, *args, **kwargs)
-    
-    school_photo = self.queryset.get(school__pk=school_pk, pk=pk)
-    serializer = self.serializer_class(school_photo, data=request.data)
-    if serializer.is_valid():
-      file = serializer.validated_data.get('file')
-      school_photo.file = file
-      school_photo.save()
-      serializer = self.serializer_class(school_photo)
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-  
-  def delete(self, request, school_pk, pk = None, *args, **kwargs):
-    if pk:
-      school_photo = self.queryset.get(school__pk=school_pk, pk=pk)
-      school_photo.delete()
-    return Response(None, status=status.HTTP_204_NO_CONTENT)
+  def get_container(self):
+    school_pk = self.kwargs.get('school_pk', None)
+    school = get_object_or_404(School, pk=school_pk)
+    self.check_object_permissions(self.request, school)
+    return school

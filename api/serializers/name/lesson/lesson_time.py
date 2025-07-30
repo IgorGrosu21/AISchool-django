@@ -1,11 +1,10 @@
-from rest_framework.serializers import CharField, TimeField
+from rest_framework.serializers import TimeField
 
 from api.models import LessonTime
 
-from ..._helpers import EditableSerializer
+from ..._helpers import CreatableSerializer
 
-class LessonTimeNameSerializer(EditableSerializer):
-  id = CharField(allow_blank=True, required=False)
+class LessonTimeNameSerializer(CreatableSerializer):
   starting = TimeField(format='%H:%M')
   ending = TimeField(format='%H:%M')
   

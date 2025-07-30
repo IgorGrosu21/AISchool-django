@@ -1,9 +1,10 @@
-from rest_framework.serializers import ModelSerializer, CharField, DateTimeField
+from rest_framework.serializers import DateTimeField
 
 from api.models import Note
 
-class NoteSerializer(ModelSerializer):
-  id = CharField(required=False, allow_blank=True)
+from ..._helpers import CreatableSerializer
+
+class NoteSerializer(CreatableSerializer):
   last_modified = DateTimeField('%d.%m, %H:%M', read_only=True)
   
   class Meta:

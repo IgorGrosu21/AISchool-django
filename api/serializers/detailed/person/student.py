@@ -13,9 +13,6 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
         **StudentSerializer.Meta.nested_fields.get('one', {}),
         'klass': 'retrieve'
       },
-      'many': {
-        **StudentSerializer.Meta.nested_fields.get('many', {})
-      },
     }
   
   def update(self, instance: Student, validated_data: dict):

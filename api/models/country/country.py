@@ -11,6 +11,9 @@ class Country(models.Model):
   school_types = models.CharField('Типы школ', blank=True, max_length=16)
   school_profiles = models.CharField('Профили школ', blank=True, max_length=32)
   
+  regions: models.Manager
+  subject_types: models.Manager
+  
   def __str__(self):
     return f'{self.name}'
   

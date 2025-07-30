@@ -7,16 +7,15 @@ from .admin_ordering import ADMIN_REORDER
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-dotenv_file = BASE_DIR / '.env'
-dotenv.load_dotenv(dotenv_file)
+dotenv.load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = bool(int(os.environ.get('DEBUG')))
+DEBUG = bool(int(os.environ.get('DEBUG', '0')))
 
 HOST = os.environ.get('HOST')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,7 +31,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'admin_reorder',
-    'django_cleanup.apps.CleanupConfig'
+    'django_cleanup.apps.CleanupConfig',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+    'drf_standardized_errors',
 ]
 
 AUTH_USER_MODEL = 'authentication.AuthUser'
@@ -41,12 +43,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'admin_reorder.middleware.ModelAdminReorder',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
     'utils.pdf_middleware.AllowIframeForPDFsMiddleware'
 ]
 
@@ -86,13 +88,12 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'utils.renderers.CamelCaseJSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PARSER_CLASSES': [
-        'utils.parsers.CamelCaseJSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser',
-    ]
+        'utils.parsers.CamelCaseJSONParser'
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_standardized_errors.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler'
 }
 
 SIMPLE_JWT = {
@@ -103,6 +104,31 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'UPDATE_LAST_LOGIN': True,
     'USER_ID_FIELD': 'email',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'AISchool API',
+    'VERSION': '0.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'ENUM_NAME_OVERRIDES': {
+        'ValidationErrorEnum': 'drf_standardized_errors.openapi_serializers.ValidationErrorEnum.choices',
+        'ClientErrorEnum': 'drf_standardized_errors.openapi_serializers.ClientErrorEnum.choices',
+        'ServerErrorEnum': 'drf_standardized_errors.openapi_serializers.ServerErrorEnum.choices',
+        'ErrorCode401Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode401Enum.choices',
+        'ErrorCode403Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode403Enum.choices',
+        'ErrorCode404Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode404Enum.choices',
+        'ErrorCode405Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode405Enum.choices',
+        'ErrorCode406Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode406Enum.choices',
+        'ErrorCode415Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode415Enum.choices',
+        'ErrorCode429Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode429Enum.choices',
+        'ErrorCode500Enum': 'drf_standardized_errors.openapi_serializers.ErrorCode500Enum.choices',
+    },
+    'POSTPROCESSING_HOOKS': ['drf_standardized_errors.openapi_hooks.postprocess_schema_enums']
+}
+
+DRF_STANDARDIZED_ERRORS = {
+    'ENABLE_IN_DEBUG_FOR_UNHANDLED_EXCEPTIONS': True,
+    'ALLOWED_ERROR_STATUS_CODES': ['400', '401', '403', '404']
 }
 
 LANGUAGE_CODE = 'en-us'
@@ -119,9 +145,12 @@ STATIC_ROOT = BASE_DIR.joinpath('static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR.joinpath('media')
 
+PUBLIC_URL = 'public/'
+PUBLIC_ROOT = BASE_DIR.joinpath('public')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(',')
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'cache-control',
