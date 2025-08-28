@@ -1,10 +1,10 @@
 from rest_framework import generics
 from drf_spectacular.utils import extend_schema
 
-from api.permisions import IsSchoolManagerOrReadonly, CanEditSchool
+from api.permissions import IsSchoolManagerOrReadonly, CanEditSchool
 from api.models import School
 from api.serializers import SchoolNameSerializer, SchoolSerializer
-from api.serializers import DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer
+from api.serializers import DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer, SchoolNameWithTimeTableSerializer
 
 from ..media import MediaView
 
@@ -22,10 +22,11 @@ class SchoolListView(SchoolNamesView):
   serializer_class = SchoolSerializer
 
 @extend_schema(tags=['api / school'])
-class DetailedSchoolView(generics.RetrieveUpdateAPIView, MediaView):
+class DetailedSchoolView(MediaView, generics.RetrieveUpdateAPIView):
   queryset = School.objects.all()
   serializer_class = DetailedSchoolSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
+  lookup_field = 'slug'
   media_field = 'preview'
 
 @extend_schema(tags=['api / school'])
@@ -33,6 +34,7 @@ class SchoolKlassesView(generics.RetrieveUpdateAPIView):
   queryset = School.objects.all()
   serializer_class = SchoolWithKlassesSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
+  lookup_field = 'slug'
   
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
@@ -43,6 +45,18 @@ class SchoolTimetableView(generics.RetrieveUpdateAPIView):
   queryset = School.objects.all()
   serializer_class = SchoolWithTimetableSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
+  lookup_field = 'slug'
+  
+  @extend_schema(exclude=True)
+  def patch(self, request, *args, **kwargs):
+    pass
+  
+@extend_schema(tags=['api / school'])
+class SchoolLessonTimesView(generics.RetrieveAPIView):
+  queryset = School.objects.all()
+  serializer_class = SchoolNameWithTimeTableSerializer
+  permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
+  lookup_field = 'slug'
   
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):

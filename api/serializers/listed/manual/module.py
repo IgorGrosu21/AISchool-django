@@ -7,15 +7,15 @@ from .manual import ManualSerializer
 from .balance import BalanceSerializer
 
 class ModuleWithManualSerializer(ModelSerializer):
-  subject = ManualSerializer()
+  manual = ManualSerializer()
   
   class Meta:
-    fields = ['name', 'subject', 'slug']
+    fields = ['name', 'manual', 'slug']
     model = Module
   
 
 class ModuleSerializer(ModuleWithManualSerializer):
-  subject = None
+  manual = None
   topics = TopicSerializer(many=True)
   balance = BalanceSerializer()
   

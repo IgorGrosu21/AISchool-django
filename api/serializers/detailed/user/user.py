@@ -20,12 +20,4 @@ class DetailedUserSerializer(UserSerializer, RelatedSerializer, CanEditSerialize
     
 class UserRoutesSerializer(UserSerializer):
   class Meta(UserSerializer.Meta):
-    fields = UserSerializer.Meta.fields + ['is_account_verified', 'klass_link', 'school_link']
-    nested_fields = {
-      'one': {
-        'city': 'retrieve'
-      },
-      'many': {
-        'socials': 'mutate'
-      }
-    }
+    fields = UserSerializer.Meta.fields + ['is_account_verified', 'klass_link', 'school_link', 'diary_link', 'journal_link']

@@ -1,6 +1,6 @@
-from rest_framework.serializers import ModelSerializer
-
 from ..user import UserNameSerializer
 
-class PersonNameSerializer(ModelSerializer):
+from ..._helpers import RetrieveableSerializer
+
+class PersonNameSerializer(RetrieveableSerializer):
   user = UserNameSerializer(read_only=True)

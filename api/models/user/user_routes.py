@@ -18,8 +18,8 @@ class UserRoutes:
   
   @property
   @handle_staff
-  def profile_link(self):
-    return f'{self.account_type}s/{self.person.id}'
+  def profile_link(self) -> str:
+    return f'profile/{self.account_type}s/{self.person.id}'
   
   @property
   @handle_staff
@@ -30,3 +30,13 @@ class UserRoutes:
   @handle_staff
   def school_link(self) -> str | None:
     return self.person.school_link
+  
+  @property
+  @handle_staff
+  def diary_link(self) -> str | None:
+    return self.person.diary_link
+  
+  @property
+  @handle_staff
+  def journal_link(self) -> str | None:
+    return self.person.journal_link

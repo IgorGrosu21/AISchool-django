@@ -4,5 +4,5 @@ from api.models import Region
 
 class RegionNameSerializer(ModelSerializer):
   class Meta:
-    fields = ['id', 'name']
+    fields = ['id', 'name', 'slug']
     model = Region

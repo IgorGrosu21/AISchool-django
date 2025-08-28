@@ -9,6 +9,7 @@ class Subject(models.Model):
   type = models.ForeignKey(SubjectType, on_delete=models.CASCADE, verbose_name='Тип', related_name='subjects')
   verbose_name = models.CharField('Читаемое название', blank=True, max_length=48)
   lang = models.CharField('Язык', max_length=2, blank=True)
+  slug = models.SlugField('Слаг', max_length=64, db_index=True)
   
   manuals: models.Manager
   
@@ -16,8 +17,12 @@ class Subject(models.Model):
     return f'{self.verbose_name if self.verbose_name else self.type} ({self.lang})'
   
   @property
-  def image(self):
+  def image(self) -> str:
     return Media.append_prefix(f'subjects/{self.type.name}.png')
+  
+  @property
+  def hasNotes(self) -> bool:
+    return self.type.hasNotes
   
   class Meta:
     ordering = ['lang', 'type__country', 'type__name']

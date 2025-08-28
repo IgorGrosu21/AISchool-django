@@ -19,6 +19,6 @@ class LessonTime(models.Model):
     return f'{self.school}, начало в {self.starting} ({self.weekday})'
   
   class Meta:
-    ordering = ['school', 'weekday', 'starting']
+    ordering = ['school', 'weekday', 'order']
     verbose_name = 'Время урока'
     verbose_name_plural = 'Время уроков'

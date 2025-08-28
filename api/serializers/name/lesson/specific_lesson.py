@@ -18,6 +18,7 @@ class SpecificLessonWithHomeworkSerializer(SpecificLessonNameSerializer):
   def __init__(self, *args, **kwargs):
     context = kwargs.get('context')
     self.student: Student = context['request'].user.user.student
+    super().__init__(*args, **kwargs)
   
   def get_note(self, obj: SpecificLesson) -> str | None:
     note_qs = obj.notes.filter(student=self.student)
@@ -31,5 +32,5 @@ class SpecificLessonWithHomeworkSerializer(SpecificLessonNameSerializer):
       return homework_qs.first().id
     return None
   
-  class Meta:
+  class Meta(SpecificLessonNameSerializer.Meta):
     fields = SpecificLessonNameSerializer.Meta.fields + ['note', 'homework']

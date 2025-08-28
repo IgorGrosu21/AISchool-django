@@ -2,7 +2,7 @@ from .progress import ProgressSerializer
 from ...listed import ModuleSerializer, ManualSerializer
 
 class DetailedModuleSerializer(ProgressSerializer, ModuleSerializer):
-  subject = ManualSerializer()
+  manual = ManualSerializer()
   
   class Meta(ModuleSerializer.Meta):
-    fields = ModuleSerializer.Meta.fields + ['progress', 'subject']
+    fields = ModuleSerializer.Meta.fields + ['progress', 'manual']

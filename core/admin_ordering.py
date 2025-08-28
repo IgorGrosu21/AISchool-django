@@ -21,6 +21,5 @@ ADMIN_REORDER = (
     'api.Social', 'api.User'
   ) },
   { 'app': 'authentication', 'label': 'Аутентификация' },
-  { 'app': 'auth', 'label': 'Авторизация' },
   { 'app': 'token_blacklist', 'label': 'Заблокированные Токены' }
 )

@@ -1,8 +1,11 @@
-from rest_framework.serializers import ModelSerializer
-
 from api.models import City
 
-class CityNameSerializer(ModelSerializer):
+from ..._helpers import RetrieveableSerializer
+
+class CityNameSerializer(RetrieveableSerializer):
   class Meta:
     fields = ['id', 'name']
     model = City
+    extra_kwargs = {
+      'name': {'read_only': True}
+    }

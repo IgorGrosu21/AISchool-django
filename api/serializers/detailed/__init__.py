@@ -3,4 +3,4 @@ from .lesson import DetailedHomeworkSerializer, DetailedSpecificLessonSerializer
 from .manual import DetailedModuleSerializer, DetailedManualSerializer, DetailedTopicSerializer
 from .person import DetailedParentSerializer, DetailedStudentSerializer, DetailedTeacherSerializer
 from .school import DetailedKlassSerializer, DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer
-from .user import DetailedUserSerializer, UserRoutesSerializer
+from .user import DetailedUserSerializer, UserRoutesSerializer  

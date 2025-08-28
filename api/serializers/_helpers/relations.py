@@ -11,6 +11,19 @@ def extract_ids(validated_data_list: list[dict]) -> list[str]:
   return [entry.get('id') for entry in validated_data_list if entry.get('id', '') != '']
 
 
+def replace_with_id(validated_data: dict | str):
+  if isinstance(validated_data, str):
+    return validated_data
+  
+  for key, value in validated_data.items():
+    if isinstance(value, Model):
+      validated_data[key] = value.id
+    elif isinstance(value, dict):
+      validated_data[key] = replace_with_id(value)
+    elif isinstance(value, list):
+      validated_data[key] = [replace_with_id(entry) for entry in value]
+  return validated_data
+
 
 def retrieve(validated_data: dict | list[dict], serializer_class: type[ModelSerializer]):
   manager = get_manager(serializer_class)
@@ -23,15 +36,14 @@ def retrieve(validated_data: dict | list[dict], serializer_class: type[ModelSeri
 def mutate(existing: Model | QuerySet | None, validated_data: dict | list[dict], serializer_class: type[ModelSerializer], context: dict):
   serializer_class_with_context = lambda *args, **kwargs: serializer_class(*args, **kwargs, context=context)
   
-  if isinstance(existing, QuerySet):
+  if isinstance(validated_data, list):
     return mutate_many(existing, validated_data, serializer_class_with_context)
-  validated_data.pop('id', None)
+  if not existing:
+    validated_data.pop('id', None)
   return mutate_one(existing, validated_data, serializer_class_with_context)
 
 def mutate_one(existing: Model | None, validated_data: dict, serializer_class: type[ModelSerializer]):
-  for key, value in validated_data.items():
-    if isinstance(value, Model):
-      validated_data[key] = value.id
+  validated_data = replace_with_id(validated_data)
   serializer = serializer_class(existing, data=validated_data)
   serializer.is_valid(raise_exception=True)
   return serializer.save()

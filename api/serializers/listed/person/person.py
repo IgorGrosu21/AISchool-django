@@ -1,8 +1,8 @@
 from ..user import UserSerializer
 
-from ..._helpers import RelatedSerializer
+from ..._helpers import RelatedSerializer, RetrieveableSerializer
 
-class PersonSerializer(RelatedSerializer):
+class PersonSerializer(RelatedSerializer, RetrieveableSerializer):
   user = UserSerializer()
   
   class Meta:

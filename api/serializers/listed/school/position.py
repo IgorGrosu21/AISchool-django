@@ -18,6 +18,6 @@ class PositionSerializer(PositionNameSerializer, RelatedSerializer, CreatableSer
         'school': 'retrieve'
       },
       'many': {
-        'subject_names': 'retrieve'
+        'subjects': 'retrieve'
       }
     }

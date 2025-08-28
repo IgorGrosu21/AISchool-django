@@ -1,8 +1,71 @@
 {
-  "id": "",
-  "specificLesson": "c48caa95-7327-419b-8846-6ab2680dd262",
-  "student": "b7e5371c-506f-4da3-b546-9b4cb01365bf",
-  "comment": "По ссылке реально хороший трек",
-  "links": "https://soundcloud.com/search?q=%D1%80%D0%B0%D1%81%D0%BF%D1%8F%D1%82%D1%8C",
-  "files": []
+  "id": "f403fcfe-822a-4980-9c40-d905f6381dea",
+  "value": "10",
+  "specificLesson": {
+    "id": "26accd8b-e949-4320-9cec-4c9cabfe67ac",
+    "lesson": {
+      "id": "99dc7819-3cfe-4f4b-b400-fd9009fe49d7",
+      "subject": {
+        "id": "5a60aee8-a348-4a94-b340-1dca937a4dfa",
+        "image": "http://localhost:8000/media/subjects/english.png",
+        "verboseName": "English language",
+        "slug": "english-EN",
+        "hasNotes": true
+      },
+      "teacher": {
+        "id": "53f7d78b-dd24-44b6-a1eb-a3c291525d66",
+        "user": {
+          "id": "d24c10f9-21d0-4d50-aac8-d81cc39c3242",
+          "name": "Оксана",
+          "surname": "Абрамова",
+          "profileLink": "profile/teachers/53f7d78b-dd24-44b6-a1eb-a3c291525d66",
+          "avatar": null,
+          "isVerified": true
+        }
+      },
+      "klass": {
+        "id": "19c41ef5-8410-4f90-84a1-3657c94edb93",
+        "grade": 12,
+        "letter": "A",
+        "profile": "R",
+        "school": {
+          "id": "7a67a5bf-29ce-4fc6-9042-696a798eff03",
+          "name": "Государственный теоретический лицей им. Александра Пушкина",
+          "city": {
+            "id": "0f575909-05f9-440d-b18c-02f9c45ad5cd",
+            "name": "Chisinau"
+          },
+          "preview": "http://localhost:8000/media/schools/фоие.jpg",
+          "slug": "IPLT-A_Puskin"
+        },
+        "slug": "12A",
+        "networth": 5
+      },
+      "lessonTime": {
+        "id": "292192b2-72db-4faa-b326-3fffa541f051",
+        "starting": "10:20",
+        "ending": "11:05",
+        "weekday": "TU",
+        "order": 2
+      },
+      "klassSlug": "12A",
+      "manualSlug": "english-EN-12"
+    },
+    "date": "2025.03.25",
+    "title": "",
+    "desc": "",
+    "files": [],
+    "links": ""
+  },
+  "student": {
+    "id": "b7e5371c-506f-4da3-b546-9b4cb01365bf",
+    "user": {
+      "id": "149bc07b-0ad8-4a54-ad2b-ebddc5803a5c",
+      "name": "Станислав",
+      "surname": "Порческу",
+      "profileLink": "profile/students/b7e5371c-506f-4da3-b546-9b4cb01365bf"
+    }
+  },
+  "comment": "",
+  "lastModified": "25.08, 10:57"
 }

@@ -7,6 +7,7 @@ class SubjectType(models.Model):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
   name = models.CharField('Название', max_length=32)
   country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, verbose_name='Страна', related_name='subject_types')
+  hasNotes = models.BooleanField('Имеет оценки')
   
   subjects: models.Manager
   

@@ -20,7 +20,11 @@ class Lesson(models.Model):
     return f'{self.klass} {self.subject}, начало в {self.lesson_time.starting} ({self.lesson_time.weekday})'
   
   @property
-  def manual_slug(self):
+  def klass_slug(self) -> str:
+    return self.klass.slug
+  
+  @property
+  def manual_slug(self) -> str:
     return f'{self.subject.type.name}-{self.subject.lang}-{self.klass.grade}'
   
   @property
@@ -34,5 +38,6 @@ class Lesson(models.Model):
     return self.klass.students
   
   class Meta:
+    ordering = ['klass__school', 'klass', 'lesson_time__weekday', 'lesson_time__order']
     verbose_name = 'Урок'
     verbose_name_plural = 'Уроки'

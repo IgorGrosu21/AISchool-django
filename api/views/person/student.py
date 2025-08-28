@@ -1,4 +1,4 @@
-from api.permisions import IsStudentOrReadonly, IsSelfOrReadonly
+from api.permissions import IsStudentOrReadonly, IsSelfOrReadonly
 from api.models import Student
 from api.serializers import DetailedStudentSerializer
 

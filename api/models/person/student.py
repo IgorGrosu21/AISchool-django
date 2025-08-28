@@ -20,18 +20,34 @@ class Student(Person):
   @property
   def lessons(self):
     lessons = self.klass.lessons.all()
-    for group in self.groups.all():
+    for group in self.groups.all().prefetch_related('lessons'):
       lessons |= group.lessons.all()
     return lessons.distinct()
   
   @property
   def klass_link(self):
-    return f'schools/{self.klass.school.id}/klasses/{self.klass.id}'
+    if self.klass:
+      return f'schools/{self.klass.school.slug}/klasses/{self.klass.slug}'
   
   @property
   def school_link(self):
-    return f'schools/{self.klass.school.id}'
-    
+    if self.school:
+      return f'schools/{self.school.slug}'
+  
+  @property
+  def school(self):
+    return self.klass.school if self.klass else None
+  
+  @property
+  def diary_link(self):
+    if self.klass:
+      return f'diary/students/{self.id}/{self.klass.school.slug}'
+  
+  @property
+  def journal_link(self):
+    if self.klass:
+      return f'journal/students/{self.id}'
+  
   @property
   def rank(self):
     if self.klass:
@@ -57,8 +73,10 @@ class Student(Person):
     self.balance.add_stones(task.cost, task.get_currency_display())
   
   def delete(self):
-    self.balance.delete()
-    self.subscription.delete()
+    if self.balance:
+      self.balance.delete()
+    if self.subscription:
+      self.subscription.delete()
     super().delete()
   
   class Meta:

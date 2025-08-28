@@ -1,3 +1,4 @@
 from .lesson_time import LessonTimeNameSerializer
+from .note import NoteNameSerializer
 from .lesson import LessonNameSerializer
 from .specific_lesson import SpecificLessonNameSerializer, SpecificLessonWithHomeworkSerializer

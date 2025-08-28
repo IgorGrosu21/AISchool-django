@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 
-from api.permisions import IsSchoolManagerOrReadonly, CanEditSchool
+from api.permissions import IsSchoolManagerOrReadonly, CanEditSchool
 from api.models import School
 
 from ..media import DetailedMediaView
@@ -12,7 +12,7 @@ class SchoolPhotoView(DetailedMediaView):
   container_field = 'school'
   
   def get_container(self):
-    school_pk = self.kwargs.get('school_pk', None)
-    school = get_object_or_404(School, pk=school_pk)
+    school_slug = self.kwargs.get('school_slug')
+    school = get_object_or_404(School, slug=school_slug)
     self.check_object_permissions(self.request, school)
     return school

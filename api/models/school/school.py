@@ -1,9 +1,10 @@
 from django.db import models
 from uuid import uuid4
 
+from ..subject import Subject
 from .position import Position
 from ..country import City
-from ..media import WithFiles
+from ..media import WithFiles, Media
 
 class School(WithFiles):
   id = models.UUIDField('id', default=uuid4, primary_key=True)
@@ -21,10 +22,16 @@ class School(WithFiles):
   emails = models.CharField('Эл. почты', max_length=128, default='', blank=True)
   website = models.URLField('Сайт', default='', blank=True)
   work_hours = models.CharField('Часы работы', max_length=16, blank=True)
+  slug = models.SlugField('Слаг', max_length=64, db_index=True)
+  subjects = models.ManyToManyField(Subject, related_name='schools', verbose_name='Предметы')
   
   timetable: models.Manager
   klasses: models.Manager
   staff: models.Manager
+  
+  @property
+  def holidays(self):
+    return self.city.holidays.split(';') if self.city else []
   
   @property
   def preview(self):
@@ -34,21 +41,23 @@ class School(WithFiles):
   def preview(self, file):
     preview_qs = self.files.filter(is_preview=True)
     if preview_qs.exists():
-      preview_qs.update(file=file)
+      preview: Media = preview_qs.first()
+      preview.file = file
+      preview.save()
     else:
       self.files.create(is_preview=True, file=file, school=self)
   
   @property
   def managers(self):
-    return self.positions.through.objects.filter(is_manager=True)
+    return self.staff.filter(is_manager=True)
   
   @property
   def head_master(self):
-    return self.positions.through.objects.filter(type='HM').first()
+    return self.staff.filter(type='HM').first()
   
   @property
   def head_teachers(self):
-    return self.positions.through.objects.filter(type='HT')
+    return self.staff.filter(type='HT')
   
   @property
   def allowed_to_edit(self):

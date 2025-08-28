@@ -13,8 +13,8 @@ class CityNamesView(generics.ListAPIView):
   serializer_class = CityNameSerializer
   
   def get_queryset(self):
-    region = self.kwargs.get('region_pk')
-    return self.queryset.filter(region=region)
+    country_slug, region_slug = self.kwargs.get('country_slug'), self.kwargs.get('region_slug')
+    return self.queryset.filter(region__country__slug=country_slug, region__slug=region_slug)
 
 @extend_schema(tags=['api / country'])
 class DetailedCityView(generics.RetrieveAPIView):

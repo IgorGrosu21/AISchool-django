@@ -7,6 +7,8 @@ class Person(models.Model):
   
   klass_link: str | None
   school_link: str | None
+  diary_link: str | None
+  journal_link: str | None
   
   def __str__(self):
     return f'{self.user}'

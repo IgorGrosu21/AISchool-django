@@ -15,15 +15,14 @@ class Homework(WithFiles):
   
   @property
   def allowed_to_edit(self):
-    return {self.student}
+    return {self.student.user.id}, True
   
   def __str__(self):
     return f'{self.student} на {self.specific_lesson}'
   
   @property
   def note(self):
-    from .note import Note
-    note_qs: models.QuerySet[Note] = self.specific_lesson.notes.filter(student=self.student)
+    note_qs: 'models.QuerySet' = self.specific_lesson.notes.filter(student=self.student)
     if note_qs.exists():
       return note_qs.first()
     return None

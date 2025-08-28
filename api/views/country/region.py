@@ -13,5 +13,5 @@ class RegionNamesView(generics.ListAPIView):
   serializer_class = RegionNameSerializer
   
   def get_queryset(self):
-    country = self.kwargs.get('country_pk')
-    return self.queryset.filter(country=country)
+    country = self.kwargs.get('country_slug')
+    return self.queryset.filter(country__slug=country)

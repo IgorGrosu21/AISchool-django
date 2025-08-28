@@ -4,8 +4,8 @@ from rest_framework.views import Response, Request
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 
-from api.permisions import IsKlassManagerOrReadonly, IsTeacherOrReadonly, CanEditSpecificLesson
-from api.models import SpecificLesson, Lesson, Klass, Student, Teacher
+from api.permissions import IsKlassManagerOrReadonly, IsTeacherOrReadonly, CanEditSpecificLesson
+from api.models import School, SpecificLesson, Lesson, Klass, Student, Teacher
 from api.serializers import SpecificLessonNameSerializer, SpecificLessonWithHomeworkSerializer
 from api.serializers import LessonSerializer, StudentSerializer, DetailedSpecificLessonSerializer
 
@@ -21,6 +21,9 @@ class SpecificLessonNamesView(generics.ListAPIView):
     if account_type == 'student':
       return SpecificLessonWithHomeworkSerializer
     return SpecificLessonNameSerializer
+  
+  def get_school(self) -> School:
+    return get_object_or_404(School, slug=self.request.query_params.get('school'))
   
   def get_account_type(self) -> str:
     account_type = self.kwargs.get('account_type', '')
@@ -43,8 +46,13 @@ class SpecificLessonNamesView(generics.ListAPIView):
     end_date = datetime.strptime(end_str, '%Y.%m.%d').date()
     person = self.get_person()
     lessons_ids = person.lessons.values_list('id', flat=True)
-    return self.queryset.filter(lesson__id__in=lessons_ids, date__gte=start_date, date__lte=end_date)
-    
+    account_type = self.get_account_type()
+    qs = self.queryset.filter(lesson__id__in=lessons_ids, date__gte=start_date, date__lte=end_date)
+    if account_type == 'teacher':
+      school = self.get_school()
+      return qs.filter(lesson__klass__school=school)
+    return qs
+
 @extend_schema(tags=['api / lesson'])
 class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
   permission_classes = [IsKlassManagerOrReadonly|IsTeacherOrReadonly, CanEditSpecificLesson]
@@ -52,18 +60,18 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
   serializer_class = DetailedSpecificLessonSerializer
   
   def get_lesson(self):
-    klass = get_object_or_404(Klass, school=self.kwargs.get('school'), id=self.kwargs.get('klass'))
-    return get_object_or_404(Lesson, klass=klass, id=self.kwargs.get('lesson'))
+    klass: Klass = get_object_or_404(Klass, school__slug=self.kwargs.get('school_slug'), slug=self.kwargs.get('klass_slug'))
+    return get_object_or_404(Lesson, klass__id=klass.id, id=self.kwargs.get('lesson_pk'))
   
   def get_date(self):
     return datetime.strptime(self.kwargs.get('date'), '%Y.%m.%d').date()
   
   def get_object(self):
-    specific_lesson = None
     try:
       specific_lesson = SpecificLesson.objects.get(lesson=self.get_lesson(), date=self.get_date())
-    finally:
-      self.check_object_permissions(self.request, specific_lesson)
+    except SpecificLesson.DoesNotExist:
+      specific_lesson = None
+    self.check_object_permissions(self.request, specific_lesson)
     return specific_lesson
   
   def get(self, request: Request, *args, **kwargs):
@@ -89,6 +97,7 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
     instance = self.get_object()
     if instance:
       return self.update(request, *args, **kwargs)
+    request.data.pop('id')
     raw_notes = request.data.pop('notes', [])
     response = self.create(request, *args, **kwargs)
     if len(raw_notes) > 0:

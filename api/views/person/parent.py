@@ -1,4 +1,4 @@
-from api.permisions import IsParentOrReadonly, IsSelfOrReadonly
+from api.permissions import IsParentOrReadonly, IsSelfOrReadonly
 from api.models import Parent
 from api.serializers import DetailedParentSerializer
 

@@ -1,1 +1,1 @@
-from .subject import SubjectNamesView
+from .subject import SubjectNamesView, TeachedSubjectsView, StudiedSubjectsView

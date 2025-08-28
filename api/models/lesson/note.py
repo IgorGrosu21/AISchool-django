@@ -18,7 +18,11 @@ class Note(models.Model):
     '7': '7',
     '8': '8',
     '9': '9',
-    '10': '10'
+    '10': '10',
+    'VG': 'VG',
+    'G': 'G',
+    'S': 'S',
+    'N': 'N'
   }
   
   id = models.UUIDField('id', default=uuid4, primary_key=True)
@@ -32,9 +36,12 @@ class Note(models.Model):
     return f'{self.value} для {self.student} по {self.specific_lesson}'
   
   @property
+  def allowed_to_edit(self):
+    return {self.specific_lesson.lesson.teacher.user.id}, True
+  
+  @property
   def homework(self):
-    from .homework import Homework
-    homework_qs: models.QuerySet[Homework] = self.specific_lesson.homeworks.filter(student=self.student)
+    homework_qs: 'models.QuerySet' = self.specific_lesson.homeworks.filter(student=self.student)
     if homework_qs.exists():
       return homework_qs.first()
     return None

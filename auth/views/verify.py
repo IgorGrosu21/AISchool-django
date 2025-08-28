@@ -1,5 +1,6 @@
 from rest_framework.views import APIView, Response, Request, status
 from rest_framework.exceptions import ParseError, NotFound
+from rest_framework.throttling import AnonRateThrottle
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.timezone import now
 from django.core.mail import EmailMultiAlternatives
@@ -45,6 +46,7 @@ class SendVerificationEmailView(APIView):
 class VerifyDetailedUserView(APIView):
   authentication_classes = []
   permission_classes = []
+  throttle_classes = [AnonRateThrottle]
   
   @extend_schema(tags=['auth / verify'], request=None, responses={
     status.HTTP_204_NO_CONTENT: None

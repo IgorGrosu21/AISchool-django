@@ -1,3 +1,4 @@
-from .klass import KlassNameSerializer
+from .group import GroupNameSerializer
+from .klass import KlassNameSerializer, KlassNameWithGroupsSerializer
 from .position import PositionNameSerializer
 from .school import SchoolNameSerializer, SchoolNameWithTimeTableSerializer

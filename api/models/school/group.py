@@ -22,5 +22,6 @@ class Group(models.Model):
     return self.klass.allowed_to_edit
   
   class Meta:
+    ordering = ['klass', 'subject', 'order']
     verbose_name = 'Группа'
     verbose_name_plural = 'Группы'

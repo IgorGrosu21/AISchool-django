@@ -1,1 +1,1 @@
-from .subject import SubjectNameSerializer
+from .subject import SubjectNameSerializer, SubjectNameWithNotesSerializer

@@ -1,5 +1,6 @@
 from django.db import models
 from uuid import uuid4
+from urllib.parse import urljoin
 from core.settings import HOST
 
 class Media(models.Model):
@@ -8,10 +9,12 @@ class Media(models.Model):
   
   @staticmethod
   def append_prefix(path):
-    return f'{HOST}/media/{path}'
+    if not HOST:
+      raise ValueError("HOST setting is required for media URL generation")
+    return urljoin(HOST, f'media/{path}')
   
   def get_absolute_url(self):
-    return self.append_prefix(self.file.name)
+    return self.append_prefix(self.file)
   
   def __str__(self):
     return self.file.name
@@ -20,7 +23,7 @@ class Media(models.Model):
     abstract = True
     
 class WithFiles(models.Model):
-  files: models.QuerySet[Media]
+  files: 'models.QuerySet[Media]'
   
   class Meta:
     abstract = True

@@ -17,6 +17,7 @@ class Klass(models.Model):
   school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='klasses', verbose_name='Школа')
   subjects = models.ManyToManyField(Subject, through='Lesson', verbose_name='Уроки')
   profile = models.CharField('Профиль', choices=PROFILES, default='R', max_length=1)
+  slug = models.SlugField('Слаг', max_length=3, db_index=True)
   
   lessons: models.Manager
   students: models.Manager

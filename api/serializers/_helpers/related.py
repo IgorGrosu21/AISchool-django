@@ -16,7 +16,9 @@ def with_relations(func):
     
     #replace raw data with Model instances 
     for field, strategy in fk_fields.items():
-      data = validated_data[field]
+      data = validated_data.get(field)
+      if data is None:
+        continue
       serializer_class: type[ModelSerializer] = type(self.fields[field])
       
       if strategy == 'retrieve':
@@ -27,12 +29,14 @@ def with_relations(func):
       validated_data[field] = mutate(existing, data, serializer_class, self.context)
     
     #we need to extract all m2m fields passed to serializer before create / update and apply the changes latter
-    m2m_data_list: dict[str, list[dict]] = {field: validated_data.pop(field) for field in m2m_fields}
+    m2m_data_list: dict[str, list[dict]] = {field: validated_data.pop(field, None) for field in m2m_fields}
     instance: Model = func(self, *args)
     
     #set m2m relationships
     for field, strategy in m2m_fields.items():
       data = m2m_data_list[field]
+      if data is None:
+        continue
       manager: Manager = getattr(instance, field)
       serializer_class: type[ModelSerializer] = type(self.fields[field].child)
       

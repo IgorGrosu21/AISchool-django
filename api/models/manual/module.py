@@ -5,7 +5,7 @@ from .balance import Balance
 from .manual import Manual
 
 class Module(WithSlug):
-  subject = models.ForeignKey(Manual, on_delete=models.SET_NULL, null=True, verbose_name='Предмет', related_name='modules')
+  manual = models.ForeignKey(Manual, on_delete=models.SET_NULL, null=True, verbose_name='Предмет', related_name='modules')
   
   topics: models.Manager
   

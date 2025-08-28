@@ -9,5 +9,6 @@ class SchoolPhoto(Media):
   school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа', related_name='files')
   
   class Meta:
+    ordering = ['-is_preview']
     verbose_name = 'Фотография школы'
     verbose_name_plural = 'Фотографии школ'

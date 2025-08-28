@@ -1,9 +1,10 @@
 from rest_framework import generics
+from rest_framework.request import Request
 from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
 from drf_spectacular.utils import extend_schema
 from django.db.models.manager import BaseManager
 
-from api.permisions import CanCreateUser
+from api.permissions import CanCreateUser
 from api.models import User, Person, Parent, Student, Teacher
 from api.serializers import DetailedUserSerializer, UserRoutesSerializer
 
@@ -28,11 +29,12 @@ class DetailedUserView(RetrieveModelMixin, CreateModelMixin, MediaView):
   def get(self, request, *args, **kwargs):
     return self.retrieve(request, *args, **kwargs)
 
-  def post(self, request, *args, **kwargs):
+  def post(self, request: Request, *args, **kwargs):
+    request.data.pop('id')
     return self.create(request, *args, **kwargs)
 
   def perform_create(self, serializer: DetailedUserSerializer):
-    user_type = self.request.data.pop('type')
+    user_type = self.request.data.pop('user_type')
     user = serializer.save(account=self.request.user)
     manager = USER_TYPE_MAPPING[user_type]
     if not manager.filter(user=user).exists():

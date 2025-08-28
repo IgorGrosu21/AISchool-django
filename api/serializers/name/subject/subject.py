@@ -1,8 +1,16 @@
-from rest_framework.serializers import ModelSerializer
-
 from api.models import Subject
 
-class SubjectNameSerializer(ModelSerializer):
+from ..._helpers import RetrieveableSerializer
+
+class SubjectNameSerializer(RetrieveableSerializer):
   class Meta:
-    fields = ['id', 'image', 'verbose_name']
+    fields = ['id', 'image', 'verbose_name', 'slug']
     model = Subject
+    extra_kwargs = {
+      'verbose_name': {'read_only': True},
+      'slug': {'read_only': True}
+    }
+    
+class SubjectNameWithNotesSerializer(SubjectNameSerializer):
+  class Meta(SubjectNameSerializer.Meta):
+    fields = SubjectNameSerializer.Meta.fields + ['hasNotes']

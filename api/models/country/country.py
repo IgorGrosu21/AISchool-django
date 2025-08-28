@@ -10,6 +10,7 @@ class Country(models.Model):
   final_grade = models.SmallIntegerField('Старший класс', default=12)
   school_types = models.CharField('Типы школ', blank=True, max_length=16)
   school_profiles = models.CharField('Профили школ', blank=True, max_length=32)
+  slug = models.SlugField('Слаг', max_length=2, db_index=True, unique=True)
   
   regions: models.Manager
   subject_types: models.Manager

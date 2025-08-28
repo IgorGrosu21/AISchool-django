@@ -1,5 +1,6 @@
 from django.db import models
 from uuid import uuid4
+from typing import Set, Tuple
 
 from auth.models import AuthUser
 from ..country import City
@@ -22,7 +23,9 @@ class User(models.Model, UserLogic, UserRoutes):
     return self.name + ' ' + self.surname if self.name else str(self.id)
   
   @property
-  def allowed_to_edit(self):
+  def allowed_to_edit(self) -> Tuple[Set[str], bool]:
+    # First element: set of user IDs that can edit
+    # Second element: boolean indicating if user needs to be verified
     return {self.id}, False
   
   class Meta:
