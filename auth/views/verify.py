@@ -36,7 +36,7 @@ class SendVerificationEmailView(APIView):
       subject='Подтвердите свой аккаунт',
       body=text_content,
       from_email=EMAIL_HOST_USER,
-      to=['igrgro@gmail.com']#[user.email],
+      to=[user.email],
     )
     email.attach_alternative(html_content, 'text/html')
     email.send()
