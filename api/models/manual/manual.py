@@ -20,5 +20,5 @@ class Manual(models.Model):
   
   class Meta:
     ordering = ['grade', 'subject']
-    verbose_name = 'Предмет'
-    verbose_name_plural = 'Предметы'
+    verbose_name = 'Учебник'
+    verbose_name_plural = 'Учебник'
