@@ -7,6 +7,7 @@ from ..country import CityNameSerializer
 from ..lesson import LessonTimeNameSerializer
 from .position import PositionNameSerializer
 from ..._helpers import RetrieveableSerializer
+from ..subject import SubjectNameSerializer
 
 class SchoolNameSerializer(RetrieveableSerializer):
   city = CityNameSerializer(read_only=True)
@@ -17,6 +18,7 @@ class SchoolNameSerializer(RetrieveableSerializer):
     model = School
 
 class SchoolNameWithTimeTableSerializer(SchoolNameSerializer):
+  subjects = SubjectNameSerializer(many=True, read_only=True)
   staff = PositionNameSerializer(many=True, read_only=True)
   timetable = LessonTimeNameSerializer(many=True, read_only=True)
   holidays = SerializerMethodField()
