@@ -100,7 +100,7 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
     request.data.pop('id')
     raw_notes = request.data.pop('notes', [])
     response = self.create(request, *args, **kwargs)
-    if len(raw_notes) > 0:
+    if len(raw_notes) > 0 and not request.user.user.is_student:
       for raw_note in raw_notes:
         raw_note['specific_lesson'] = str(instance.id)
       setattr(self.request, 'data', {'notes': raw_notes})

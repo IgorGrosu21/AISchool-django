@@ -10,6 +10,10 @@ class Person(models.Model):
   diary_link: str | None
   journal_link: str | None
   
+  @property
+  def allowed_to_edit(self):
+    return self.user.allowed_to_edit
+  
   def __str__(self):
     return f'{self.user}'
   
