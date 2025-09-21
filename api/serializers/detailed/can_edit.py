@@ -12,4 +12,5 @@ class CanEditSerializer(Serializer):
     allowed_to_edit, verification_required = obj.allowed_to_edit
     if verification_required and not user.is_verified:
       return False
+    print(allowed_to_edit)
     return user.id in allowed_to_edit or user.account.is_staff

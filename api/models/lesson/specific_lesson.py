@@ -24,7 +24,7 @@ class SpecificLesson(WithFiles):
   
   @property
   def allowed_to_edit(self):
-    return {self.lesson.teacher.user.id} | set(self.lesson.klass.students.filter(is_manager=True).values_list('user__id')), True
+    return {self.lesson.teacher.user.id} | set(*self.lesson.klass.students.filter(is_manager=True).values_list('user__id')), True
   
   class Meta:
     verbose_name = 'Конкретный урок'

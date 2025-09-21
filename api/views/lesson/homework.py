@@ -46,7 +46,8 @@ class DetailedHomeworkView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateM
       'files': [],
       'last_modified': str(datetime.now()),
       'specific_lesson': SpecificLessonSerializer(specific_lesson).data,
-      'note': NoteNameSerializer(specific_lesson.notes.filter(student=student).first()).data
+      'note': NoteNameSerializer(specific_lesson.notes.filter(student=student).first()).data,
+      'can_edit': True
     }
     return Response(data, status=status.HTTP_200_OK)
   

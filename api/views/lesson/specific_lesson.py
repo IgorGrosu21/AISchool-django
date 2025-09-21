@@ -89,7 +89,9 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
       'links': '',
       'students': StudentSerializer(lesson.students, many=True).data,
       'notes': [],
-      'homeworks': []
+      'homeworks': [],
+      'can_edit': True,
+      'is_student': request.user.user.is_student
     }
     return Response(data, status=status.HTTP_200_OK)
   
