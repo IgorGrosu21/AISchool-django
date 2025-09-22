@@ -1,11 +1,11 @@
 from django.db import models
-from uuid import uuid4
+
+from ..media import Media
+from ..with_uuid import WithUUID
 
 from .subject_type import SubjectType
-from ..media import Media
 
-class Subject(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class Subject(WithUUID):
   type = models.ForeignKey(SubjectType, on_delete=models.CASCADE, verbose_name='Тип', related_name='subjects')
   verbose_name = models.CharField('Читаемое название', blank=True, max_length=48)
   lang = models.CharField('Язык', max_length=2, blank=True)
@@ -21,8 +21,8 @@ class Subject(models.Model):
     return Media.append_prefix(f'subjects/{self.type.name}.png')
   
   @property
-  def hasNotes(self) -> bool:
-    return self.type.hasNotes
+  def has_notes(self) -> bool:
+    return self.type.has_notes
   
   class Meta:
     ordering = ['lang', 'type__country', 'type__name']

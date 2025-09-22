@@ -5,3 +5,40 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
+
+[tool.pylint]
+load-plugins = "pylint_django"
+django-settings-module = "core.settings"
+
+# Disable some warnings that are common in Django projects
+disable = [
+    "missing-docstring",
+    "too-few-public-methods",
+    "too-many-arguments",
+    "too-many-locals",
+    "too-many-branches",
+    "too-many-statements",
+    "import-outside-toplevel",
+    "unused-argument",
+    "no-member",
+    "bad-indentation",
+    "line-too-long",
+]
+
+# Enable more comprehensive checking
+enable = [
+    "all",
+]
+
+# Set confidence threshold (show more warnings)
+confidence = "HIGH"
+
+# Ignore migrations and other generated files
+ignore-paths = [
+    "migrations",
+    "venv",
+    ".venv",
+    "node_modules",
+    "__pycache__",
+    ".*\\.pyc$",
+]

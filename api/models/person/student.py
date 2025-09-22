@@ -1,11 +1,20 @@
 from django.db import models
 
+from ..manual.balance import Balance
+from ..manual.manual import Manual
+from ..manual.module import Module
+from ..manual.task import Task
+from ..manual.topic import Topic
+from ..school.group import Group
+from ..school.klass import Klass
+
 from .person import Person
 from .subscription import Subscription
-from ..manual import Balance, Manual, Module, Topic, Task
-from ..school import Klass, Group
 
-class Student(Person):
+from .home.student import StudentHome
+from .routes.student import StudentRoutes
+
+class Student(Person, StudentHome, StudentRoutes):
   klass = models.ForeignKey(Klass, on_delete=models.SET_NULL, null=True, related_name='students', verbose_name='Класс', blank=True)
   subscription = models.OneToOneField(Subscription, on_delete=models.SET_NULL, null=True, related_name='student', verbose_name='Подписка', blank=True)
   balance = models.OneToOneField(Balance, on_delete=models.SET_NULL, related_name='student', verbose_name='Баланс', null=True, blank=True)
@@ -23,30 +32,6 @@ class Student(Person):
     for group in self.groups.all().prefetch_related('lessons'):
       lessons |= group.lessons.all()
     return lessons.distinct()
-  
-  @property
-  def klass_link(self):
-    if self.klass:
-      return f'schools/{self.klass.school.slug}/klasses/{self.klass.slug}'
-  
-  @property
-  def school_link(self):
-    if self.school:
-      return f'schools/{self.school.slug}'
-  
-  @property
-  def school(self):
-    return self.klass.school if self.klass else None
-  
-  @property
-  def diary_link(self):
-    if self.klass:
-      return f'diary/students/{self.id}/{self.klass.school.slug}'
-  
-  @property
-  def journal_link(self):
-    if self.klass:
-      return f'journal/students/{self.id}'
   
   @property
   def rank(self):

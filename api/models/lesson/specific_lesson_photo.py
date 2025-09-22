@@ -1,6 +1,7 @@
 from django.db import models
 
 from ..media import Media
+
 from .specific_lesson import SpecificLesson
 
 class SpecificLessonPhoto(Media):

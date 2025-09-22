@@ -1,10 +1,11 @@
 from django.db import models
-from uuid import uuid4
+
+from ..person.student import Student
+from ..with_uuid import WithUUID
 
 from .specific_lesson import SpecificLesson
-from ..person import Student
 
-class Note(models.Model):
+class Note(WithUUID):
   VALUES = {
     'ma': 'Уважительный пропуск',
     'ua': 'Неуважительный пропуск',
@@ -24,8 +25,6 @@ class Note(models.Model):
     'S': 'S',
     'N': 'N'
   }
-  
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   value = models.CharField('Значение', choices=VALUES, max_length=2)
   specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='notes', verbose_name='Конкретный урок')
   student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='notes', verbose_name='Ученик')

@@ -1,17 +1,17 @@
 from django.db import models
-from uuid import uuid4
 
-from ..school import Klass, Group
-from ..subject import Subject
-from ..person import Teacher
+from ..school.group import Group
+from ..school.klass import Klass
+from ..subject.subject import Subject
+from ..with_uuid import WithUUID
+
 from .lesson_time import LessonTime
 
-class Lesson(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class Lesson(WithUUID):
   klass = models.ForeignKey(Klass, on_delete=models.CASCADE, related_name='lessons', verbose_name='Класс')
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Предмет')
   lesson_time = models.ForeignKey(LessonTime, on_delete=models.CASCADE, related_name='lessons', verbose_name='Время')
-  teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, related_name='lessons', null=True, verbose_name='Учитель')
+  teacher = models.ForeignKey('Teacher', on_delete=models.SET_NULL, related_name='lessons', null=True, verbose_name='Учитель')
   group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='lessons', verbose_name='Группа')
   
   specific_lessons: models.Manager

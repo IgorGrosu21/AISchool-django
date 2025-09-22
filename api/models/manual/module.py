@@ -1,8 +1,8 @@
 from django.db import models
 
-from .with_slug import WithSlug
 from .balance import Balance
 from .manual import Manual
+from .with_slug import WithSlug
 
 class Module(WithSlug):
   manual = models.ForeignKey(Manual, on_delete=models.SET_NULL, null=True, verbose_name='Предмет', related_name='modules')

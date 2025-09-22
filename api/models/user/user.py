@@ -1,14 +1,16 @@
-from django.db import models
-from uuid import uuid4
 from typing import Set, Tuple
 
+from django.db import models
+
 from auth.models import AuthUser
-from ..country import City
+
+from ..country.city import City
+from ..with_uuid import WithUUID
+
 from .user_logic import UserLogic
 from .user_routes import UserRoutes
 
-class User(models.Model, UserLogic, UserRoutes):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class User(WithUUID, UserLogic, UserRoutes):
   account = models.OneToOneField(AuthUser, on_delete=models.CASCADE, unique=True, related_name='user')
   name = models.CharField('Имя', max_length=16)
   surname = models.CharField('Фамилия', max_length=16)

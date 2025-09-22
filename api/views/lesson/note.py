@@ -1,6 +1,6 @@
 from datetime import datetime
-from rest_framework import generics, status, mixins
-from rest_framework.views import Request, Response
+from rest_framework import generics, mixins
+from rest_framework.views import Request
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 

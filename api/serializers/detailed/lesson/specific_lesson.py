@@ -12,7 +12,7 @@ class DetailedSpecificLessonSerializer(RelatedSerializer, SpecificLessonSerializ
   students = StudentSerializer(many=True, read_only=True)
   is_student = SerializerMethodField()
   
-  def get_is_student(self, obj):
+  def get_is_student(self, obj) -> bool:
     request = self.context.get('request')
     if request and hasattr(request, 'user') and hasattr(request.user, 'user'):
       return request.user.user.is_student

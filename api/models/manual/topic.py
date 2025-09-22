@@ -1,8 +1,8 @@
 from django.db import models
 
-from .with_slug import WithSlug
 from .balance import Balance
 from .module import Module
+from .with_slug import WithSlug
 
 class Topic(WithSlug):
   module = models.ForeignKey(Module, on_delete=models.SET_NULL, null=True, verbose_name='Модуль', related_name='topics')

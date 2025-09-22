@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import person as models
+from api.models import PersonModels as models
 
 class StudentInline(admin.TabularInline):
   model = models.Student

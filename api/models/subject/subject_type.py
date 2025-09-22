@@ -1,13 +1,12 @@
 from django.db import models
-from uuid import uuid4
 
-from ..country import Country
+from ..country.country import Country
+from ..with_uuid import WithUUID
 
-class SubjectType(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class SubjectType(WithUUID):
   name = models.CharField('Название', max_length=32)
   country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, verbose_name='Страна', related_name='subject_types')
-  hasNotes = models.BooleanField('Имеет оценки')
+  has_notes = models.BooleanField('Имеет оценки')
   
   subjects: models.Manager
   

@@ -1,15 +1,14 @@
 from django.db import models
-from uuid import uuid4
 
-class Subscription(models.Model):
+from ..with_uuid import WithUUID
+
+class Subscription(WithUUID):
   PLANS = {
     'A': 'monthly',
     'Y': 'yearly',
     'K': 'klass',
     'L': 'lifetime'
   }
-  
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   plan = models.CharField('План', default='Y', choices=PLANS, max_length=1)
   price = models.SmallIntegerField('Цена', default=1000)
   ending = models.DateField('Конец')

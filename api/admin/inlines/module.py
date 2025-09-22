@@ -1,19 +1,19 @@
 from django.contrib import admin
 
-from api.models import Task, Theory, Topic, Module
+from api.models import ManualModels as models
 
 class ModuleInline(admin.TabularInline):
-  model = Module
+  model = models.Module
   extra = 0
 
 class TopicInline(admin.TabularInline):
-  model = Topic
+  model = models.Topic
   extra = 0
 
 class TaskInline(admin.TabularInline):
-  model = Task
+  model = models.Task
   extra = 0
   
 class TheoryInline(admin.TabularInline):
-  model = Theory
+  model = models.Theory
   extra = 0

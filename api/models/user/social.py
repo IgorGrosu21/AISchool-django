@@ -1,15 +1,14 @@
 from django.db import models
-from uuid import uuid4
+
+from ..with_uuid import WithUUID
 
 from .user import User
 
-class Social(models.Model):
+class Social(WithUUID):
   TYPES = (
     ('ig', 'Instagram'),
     ('fb', 'Facebook'),
   )
-  
-  id = models.UUIDField(primary_key=True, default=uuid4)
   type = models.CharField('Соц. сеть', max_length=2, choices=TYPES)
   link = models.URLField('Ссылка')
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='socials', verbose_name='Пользователь')

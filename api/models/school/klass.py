@@ -1,16 +1,15 @@
 from django.db import models
-from uuid import uuid4
+
+from ..subject.subject import Subject
+from ..with_uuid import WithUUID
 
 from .school import School
-from ..subject import Subject
 
-class Klass(models.Model):
+class Klass(WithUUID):
   PROFILES = {
     'R': 'Реальный',
     'U': 'Гуманитарный',
   }
-  
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   grade = models.SmallIntegerField('Цифра', default=1)
   letter = models.CharField('Буква', default='A', max_length=1)
   teacher = models.OneToOneField('Teacher', on_delete=models.SET_NULL, null=True, verbose_name='Классный руководитель', related_name='klass', blank=True)

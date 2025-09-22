@@ -13,4 +13,4 @@ class SubjectNameSerializer(RetrieveableSerializer):
     
 class SubjectNameWithNotesSerializer(SubjectNameSerializer):
   class Meta(SubjectNameSerializer.Meta):
-    fields = SubjectNameSerializer.Meta.fields + ['hasNotes']
+    fields = SubjectNameSerializer.Meta.fields + ['has_notes']

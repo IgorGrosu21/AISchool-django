@@ -1,7 +1,8 @@
-from api.models import Student, Klass, Balance
+from api.models import Balance, Klass, Student
 
-from ...listed import KlassSerializer, StudentSerializer
-from .person import DetailedPersonSerializer
+from ...listed import KlassSerializer, StudentSerializer, NoteSerializer, SpecificLessonSerializer
+from .person import DetailedPersonSerializer, PersonHomeSerializer
+from .analytics import StudentAnalyticsSerializer
 
 class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
   klass = KlassSerializer()
@@ -33,3 +34,11 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
       instance.balance = Balance.objects.create()
       instance.save()
     return instance
+    
+class StudentHomeSerializer(PersonHomeSerializer):
+  latest_notes = NoteSerializer(many=True, read_only=True)
+  latest_specific_lessons = SpecificLessonSerializer(many=True, read_only=True)
+  analytics = StudentAnalyticsSerializer(many=True, read_only=True)
+  
+  class Meta(StudentSerializer.Meta):
+    fields = PersonHomeSerializer.Meta.fields + ['latest_notes', 'latest_specific_lessons', 'analytics']

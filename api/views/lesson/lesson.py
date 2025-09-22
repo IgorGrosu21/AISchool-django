@@ -1,8 +1,8 @@
-from rest_framework import generics, exceptions
-from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
+from rest_framework import exceptions, generics
 
-from api.models import School, Lesson, Parent, Student, Teacher
+from api.models import Lesson, Parent, School, Student, Teacher
 from api.serializers import LessonNameSerializer
 
 @extend_schema(tags=['api / lesson'])

@@ -1,7 +1,8 @@
 from functools import wraps
 
 from auth.models import AuthUser
-from api.models import Person
+
+from ..person.person import Person
 
 class UserRoutes:
   account: AuthUser

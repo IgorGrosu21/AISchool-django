@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import manual as models
+from api.models import ManualModels as models
 
 class ManualInline(admin.TabularInline):
   model = models.Manual

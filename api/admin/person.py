@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import person as models
+from api.models import PersonModels as models
 
 from .inlines import (
   ParentStudentInline, 

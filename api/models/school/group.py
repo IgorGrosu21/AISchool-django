@@ -1,11 +1,11 @@
 from django.db import models
-from uuid import uuid4
+
+from ..subject.subject import Subject
+from ..with_uuid import WithUUID
 
 from .klass import Klass
-from ..subject import Subject
 
-class Group(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class Group(WithUUID):
   order = models.SmallIntegerField('Номер группы')
   klass = models.ForeignKey(Klass, on_delete=models.CASCADE, related_name='groups', verbose_name='Класс')
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='groups', verbose_name='Предмет')

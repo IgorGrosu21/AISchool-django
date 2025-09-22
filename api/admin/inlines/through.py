@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from api.models import Parent, Student, Teacher
+from api.models import PersonModels as models
 
 class ParentStudentInline(admin.TabularInline):
-  model = Parent.students.through
+  model = models.Parent.students.through
 
 class StudentGroupInline(admin.TabularInline):
-  model = Student.groups.through
+  model = models.Student.groups.through
 
 class TeacherSubjectInline(admin.TabularInline):
-  model = Teacher.subjects.through
+  model = models.Teacher.subjects.through

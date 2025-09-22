@@ -1,10 +1,9 @@
 from django.db import models
-from uuid import uuid4
 
-class Balance(models.Model):
+from ..with_uuid import WithUUID
+
+class Balance(WithUUID):
   MAPPING = { 'sapphires': 1, 'rubies': 5, 'emeralds': 10, 'diamonds': 50 }
-  
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   sapphires = models.SmallIntegerField('Сапфиры', default=0)
   rubies = models.SmallIntegerField('Рубины', default=0)
   emeralds = models.SmallIntegerField('Изумруды', default=0)

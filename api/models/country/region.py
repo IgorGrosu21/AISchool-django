@@ -1,10 +1,9 @@
 from django.db import models
-from uuid import uuid4
 
+from ..with_uuid import WithUUID
 from .country import Country
 
-class Region(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class Region(WithUUID):
   name = models.CharField('Название', max_length=32)
   country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, verbose_name='Страна', related_name='regions')
   slug = models.SlugField('Слаг', max_length=64, db_index=True)

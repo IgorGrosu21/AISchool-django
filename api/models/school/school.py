@@ -1,15 +1,12 @@
 from django.db import models
-from uuid import uuid4
 
-from ..subject import Subject
-from .position import Position
-from ..country import City
-from ..media import WithFiles, Media
+from ..country.city import City
+from ..media import Media, WithFiles
+from ..subject.subject import Subject
 
 class School(WithFiles):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   name = models.CharField('Название', max_length=64)
-  teachers = models.ManyToManyField('Teacher', through=Position, verbose_name='Позиции', related_name='schools')
+  teachers = models.ManyToManyField('Teacher', through='Position', verbose_name='Позиции', related_name='schools')
   city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, verbose_name='Город', related_name='schools')
   address = models.CharField('Адрес', max_length=64)
   lang = models.CharField('Язык', blank=True, max_length=2)

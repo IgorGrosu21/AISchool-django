@@ -1,10 +1,9 @@
 from django.db import models
-from uuid import uuid4
 
+from ..with_uuid import WithUUID
 from .region import Region
 
-class City(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class City(WithUUID):
   name = models.CharField('Название', max_length=32)
   region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, verbose_name='Регион', related_name='cities')
   holidays = models.TextField('Каникулы')

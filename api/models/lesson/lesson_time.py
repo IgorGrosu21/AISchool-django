@@ -1,12 +1,10 @@
 from django.db import models
-from uuid import uuid4
 
-from ..school import School
+from ..school.school import School
+from ..with_uuid import WithUUID
 
-class LessonTime(models.Model):
+class LessonTime(WithUUID):
   WEEKDAYS = {val: val for val in ('MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU')}
-  
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='timetable', verbose_name='Класс')
   starting = models.TimeField('Начало')
   ending = models.TimeField('Конец')

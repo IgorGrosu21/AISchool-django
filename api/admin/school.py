@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import school as models
+from api.models import SchoolModels as models
 
 from .inlines import (
   LessonInline, StudentGroupInline,

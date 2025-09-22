@@ -1,5 +1,5 @@
-from django.utils.deprecation import MiddlewareMixin
 from django.http import request, response
+from django.utils.deprecation import MiddlewareMixin
 
 class AllowIframeForPDFsMiddleware(MiddlewareMixin):
   def process_response(self, request: request.HttpRequest, response: response.HttpResponse):

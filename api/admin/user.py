@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import user as models
+from api.models import UserModels as models
 
 from .inlines import SocialInline
 

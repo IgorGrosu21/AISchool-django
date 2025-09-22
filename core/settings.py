@@ -1,8 +1,10 @@
-import dotenv
 import os
 from datetime import timedelta
 from pathlib import Path
+
+import dotenv
 from corsheaders.defaults import default_headers
+
 from .admin_ordering import ADMIN_REORDER
 
 BASE_DIR = Path(__file__).resolve().parent.parent

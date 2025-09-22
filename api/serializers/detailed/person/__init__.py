@@ -1,3 +1,3 @@
-from .parent import DetailedParentSerializer
-from .student import DetailedStudentSerializer
-from .teacher import DetailedTeacherSerializer
+from .parent import DetailedParentSerializer, ParentHomeSerializer
+from .student import DetailedStudentSerializer, StudentHomeSerializer
+from .teacher import DetailedTeacherSerializer, TeacherHomeSerializer

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import lesson as models
+from api.models import LessonModels as models
 
 class HomeworkPhotoInline(admin.TabularInline):
   model = models.HomeworkPhoto

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import subject as models
+from api.models import SubjectModels as models
 
 from .inlines import SubjectInline, ManualInline
 

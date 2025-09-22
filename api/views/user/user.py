@@ -1,11 +1,11 @@
-from rest_framework import generics
-from rest_framework.request import Request
-from rest_framework.mixins import RetrieveModelMixin, CreateModelMixin
-from drf_spectacular.utils import extend_schema
 from django.db.models.manager import BaseManager
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.request import Request
 
-from api.permissions import CanCreateUser
-from api.models import User, Person, Parent, Student, Teacher
+from api.models import Parent, Person, Student, Teacher, User
+from api.permissions import CanCreateUser, IsSelf
 from api.serializers import DetailedUserSerializer, UserRoutesSerializer
 
 from ..media import MediaView
@@ -44,6 +44,7 @@ class DetailedUserView(RetrieveModelMixin, CreateModelMixin, MediaView):
 class UserRoutesView(generics.RetrieveAPIView):
   queryset = User.objects.all()
   serializer_class = UserRoutesSerializer
+  permission_classes = [IsSelf]
   
   def get_object(self) -> User:
     return self.request.user.user

@@ -1,10 +1,12 @@
-from django.db import models
-from uuid import uuid4
 from urllib.parse import urljoin
+
+from django.db import models
+
 from core.settings import HOST
 
-class Media(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+from .with_uuid import WithUUID
+
+class Media(WithUUID):
   file: models.FileField
   
   @staticmethod
@@ -22,7 +24,7 @@ class Media(models.Model):
   class Meta:
     abstract = True
     
-class WithFiles(models.Model):
+class WithFiles(WithUUID):
   files: 'models.QuerySet[Media]'
   
   class Meta:

@@ -1,6 +1,7 @@
 from django.db import models
 
 from ..media import Media
+
 from .homework import Homework
 
 class HomeworkPhoto(Media):

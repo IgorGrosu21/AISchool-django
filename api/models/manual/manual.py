@@ -1,10 +1,9 @@
 from django.db import models
-from uuid import uuid4
 
-from ..subject import Subject
+from ..subject.subject import Subject
+from ..with_uuid import WithUUID
 
-class Manual(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+class Manual(WithUUID):
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Название', related_name='manuals')
   grade = models.SmallIntegerField('Класс', default=5)
   slug = models.SlugField('Слаг', max_length=64, unique=True, db_index=True)

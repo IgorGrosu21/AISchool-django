@@ -1,7 +1,7 @@
 from .detailed import DetailedCitySerializer
 from .detailed import DetailedHomeworkSerializer, DetailedSpecificLessonSerializer
 from .detailed import DetailedModuleSerializer, DetailedManualSerializer, DetailedTopicSerializer
-from .detailed import DetailedParentSerializer, DetailedStudentSerializer, DetailedTeacherSerializer
+from .detailed import DetailedParentSerializer, DetailedStudentSerializer, DetailedTeacherSerializer, ParentHomeSerializer, StudentHomeSerializer, TeacherHomeSerializer
 from .detailed import DetailedKlassSerializer, DetailedSchoolSerializer, SchoolWithKlassesSerializer, SchoolWithTimetableSerializer
 from .detailed import DetailedUserSerializer, UserRoutesSerializer
 

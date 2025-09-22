@@ -1,12 +1,11 @@
 from django.db import models
-from uuid import uuid4
+
+from ..media import WithFiles
+from ..person.student import Student
 
 from .specific_lesson import SpecificLesson
-from ..person import Student
-from ..media import WithFiles
 
 class Homework(WithFiles):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
   specific_lesson = models.ForeignKey(SpecificLesson, on_delete=models.CASCADE, related_name='homeworks', verbose_name='Конкретный урок')
   student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homeworks', verbose_name='Ученик')
   comment = models.CharField('Комментарий', max_length=256, blank=True)

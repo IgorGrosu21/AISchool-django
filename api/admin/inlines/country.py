@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import country as models
+from api.models import CountryModels as models
 
 class RegionInline(admin.TabularInline):
   model = models.Region

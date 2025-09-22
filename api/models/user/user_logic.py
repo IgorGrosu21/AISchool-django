@@ -1,5 +1,9 @@
 from auth.models import AuthUser
-from ..person import Person, Parent, Student, Teacher
+
+from ..person.parent import Parent
+from ..person.person import Person
+from ..person.student import Student
+from ..person.teacher import Teacher
 
 class UserLogic:
   account: AuthUser

@@ -1,7 +1,8 @@
-from rest_framework import generics
 from drf_spectacular.utils import extend_schema
+from rest_framework import generics
+
 from auth.models import AuthUser
-from auth.serializers import SignUpSerializer, LoginSerializer
+from auth.serializers import LoginSerializer, SignUpSerializer
 
 class AuthView(generics.CreateAPIView):
   queryset = AuthUser.objects.all()

@@ -1,8 +1,8 @@
 from django.db import models
-from uuid import uuid4
 
-class Person(models.Model):
-  id = models.UUIDField('id', default=uuid4, primary_key=True)
+from ..with_uuid import WithUUID
+
+class Person(WithUUID):
   user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='%(class)s_account', verbose_name='Пользователь')
   
   klass_link: str | None
@@ -13,6 +13,10 @@ class Person(models.Model):
   @property
   def allowed_to_edit(self):
     return self.user.allowed_to_edit
+  
+  @property
+  def profile_type(self) -> str | None:
+    return self.user.account_type
   
   def __str__(self):
     return f'{self.user}'
