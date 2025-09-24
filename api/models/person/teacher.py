@@ -4,10 +4,9 @@ from ..subject.subject import Subject
 
 from .person import Person
 
-from .home.teacher import TeacherHome
 from .routes.teacher import TeacherRoutes
 
-class Teacher(Person, TeacherHome, TeacherRoutes):
+class Teacher(Person, TeacherRoutes):
   subjects = models.ManyToManyField(Subject, related_name='all_teachers', verbose_name='Предметы')
   experience = models.SmallIntegerField('Стаж работы', default=0)
 

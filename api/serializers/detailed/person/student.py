@@ -39,6 +39,3 @@ class StudentHomeSerializer(PersonHomeSerializer):
   latest_notes = NoteSerializer(many=True, read_only=True)
   latest_specific_lessons = SpecificLessonSerializer(many=True, read_only=True)
   analytics = StudentAnalyticsSerializer(many=True, read_only=True)
-
-  class Meta(StudentSerializer.Meta):
-    fields = PersonHomeSerializer.Meta.fields + ['latest_notes', 'latest_specific_lessons', 'analytics']

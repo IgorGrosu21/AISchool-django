@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import Serializer, UUIDField, CharField
 
 
 from ..can_edit import CanEditSerializer
@@ -10,8 +10,7 @@ from ..._helpers import RelatedSerializer
 class DetailedPersonSerializer(RelatedSerializer, CanEditSerializer):
   user = DetailedUserSerializer()
 
-class PersonHomeSerializer(ModelSerializer):
+class PersonHomeSerializer(Serializer):
+  id = UUIDField(read_only=True)
   user = UserSerializer(read_only=True)
-
-  class Meta:
-    fields = ['id', 'user', 'profile_type']
+  profile_type = CharField(read_only=True)

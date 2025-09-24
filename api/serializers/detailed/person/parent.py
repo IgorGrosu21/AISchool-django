@@ -18,6 +18,3 @@ class DetailedParentSerializer(DetailedPersonSerializer, ParentSerializer):
 
 class ParentHomeSerializer(PersonHomeSerializer):
   students = StudentHomeSerializer(many=True, read_only=True)
-
-  class Meta(ParentSerializer.Meta):
-    fields = PersonHomeSerializer.Meta.fields + ['students']

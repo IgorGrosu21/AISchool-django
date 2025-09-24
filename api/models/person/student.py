@@ -11,10 +11,9 @@ from ..school.klass import Klass
 from .person import Person
 from .subscription import Subscription
 
-from .home.student import StudentHome
 from .routes.student import StudentRoutes
 
-class Student(Person, StudentHome, StudentRoutes):
+class Student(Person, StudentRoutes):
   klass = models.ForeignKey(Klass, on_delete=models.SET_NULL, null=True, related_name='students', verbose_name='Класс', blank=True)
   subscription = models.OneToOneField(Subscription, on_delete=models.SET_NULL, null=True, related_name='student', verbose_name='Подписка', blank=True)
   balance = models.OneToOneField(Balance, on_delete=models.SET_NULL, related_name='student', verbose_name='Баланс', null=True, blank=True)

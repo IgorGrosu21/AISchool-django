@@ -26,6 +26,3 @@ class TeacherHomeSerializer(PersonHomeSerializer):
   latest_homeworks = DetailedHomeworkSerializer(many=True, read_only=True)
   tomorrow_timetable = TomorrowTimetableSerializer(many=True, read_only=True)
   analytics = TeacherAnalyticsSerializer(many=True, read_only=True)
-
-  class Meta(TeacherSerializer.Meta):
-    fields = PersonHomeSerializer.Meta.fields + ['latest_homeworks', 'tomorrow_timetable', 'analytics']
