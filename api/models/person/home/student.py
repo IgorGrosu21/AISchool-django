@@ -5,7 +5,7 @@ class StudentHome:
 
   @property
   def latest_specific_lessons(self):
-    SpecificLesson = self.lessons.model.specific_lessons.model
+    SpecificLesson = self.lessons.model.specific_lessons.field.model
 
     lesson_ids = self.lessons.values_list('id', flat=True)
     return SpecificLesson.objects.filter(lesson_id__in=lesson_ids).order_by('-last_modified')[:4]

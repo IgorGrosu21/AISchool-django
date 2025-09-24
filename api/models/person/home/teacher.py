@@ -5,8 +5,7 @@ from django.db.models import Q
 class TeacherHome:
   @property
   def latest_homeworks(self):
-    Homework = self.lessons.model.specific_lessons.model.homeworks.model
-
+    Homework = self.lessons.model.specific_lessons.field.model.homeworks.field.model
     lesson_ids = self.lessons.values_list('id', flat=True)
     return Homework.objects.filter(specific_lesson__lesson_id__in=lesson_ids).order_by('-last_modified')[:4]
 
@@ -29,7 +28,7 @@ class TeacherHome:
 
   @property
   def analytics(self):
-    Note = self.lessons.model.specific_lessons.model.notes.model
+    Note = self.lessons.model.specific_lessons.field.model.notes.field.model
 
     return [{
       'school': work_place.school,
