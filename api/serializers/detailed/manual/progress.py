@@ -4,7 +4,7 @@ from api.models import User, Student
 
 class ProgressSerializer(ModelSerializer):
   progress = SerializerMethodField()
-  
+
   def get_progress(self, obj) -> None | float:
     user: User = self.context['request'].user.user
     if user.student:

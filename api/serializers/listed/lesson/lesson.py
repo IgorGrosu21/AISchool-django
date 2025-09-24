@@ -6,7 +6,7 @@ class LessonSerializer(LessonNameSerializer):
   lesson_time = LessonTimeNameSerializer()
   teacher = TeacherSerializer()
   klass = KlassSerializer()
-  
+
   class Meta(LessonNameSerializer.Meta):
     nested_fields = {
       'one': {

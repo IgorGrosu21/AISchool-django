@@ -8,7 +8,7 @@ class AuthView(generics.CreateAPIView):
   queryset = AuthUser.objects.all()
   authentication_classes = []
   permission_classes = []
-  
+
 @extend_schema(tags=['auth / auth'])
 class SignUpView(AuthView):
   serializer_class = SignUpSerializer

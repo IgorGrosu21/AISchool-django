@@ -17,10 +17,10 @@ class Position(WithUUID):
   subjects = models.ManyToManyField(Subject, verbose_name='Предметы', blank=True)
   type = models.CharField('Тип', choices=TYPES, max_length=2, default='T')
   is_manager = models.BooleanField('Является менеджером', default=False)
-  
+
   def __str__(self):
     return f'{self.get_type_display()}: {self.teacher} в {self.school}'
-  
+
   class Meta:
     ordering = ['school', 'type']
     verbose_name = 'Позиция'

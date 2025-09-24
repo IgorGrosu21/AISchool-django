@@ -9,16 +9,13 @@ class Balance(WithUUID):
   emeralds = models.SmallIntegerField('Изумруды', default=0)
   diamonds = models.SmallIntegerField('Бриллианты', default=0)
   networth = models.SmallIntegerField('Состояние', default=0)
-  
-  def __str__(self):
-    return f'{self.student}'
-  
+
   def add_stones(self, quantity: int, stone_type: str):
     setattr(self, stone_type, models.F(stone_type) + quantity)
     self.networth = models.F('networth') + quantity * Balance.MAPPING[stone_type]
     self.save(update_fields=[stone_type, 'networth'])
     return self
-  
+
   def __add__(self, other: 'Balance'):
     return Balance(
       sapphires = self.sapphires + other.sapphires,
@@ -26,7 +23,7 @@ class Balance(WithUUID):
       emeralds = self.emeralds + other.emeralds,
       diamonds = self.diamonds + other.diamonds
     )
-    
+
   @staticmethod
   def default():
     return Balance(
@@ -35,7 +32,10 @@ class Balance(WithUUID):
       emeralds = 0,
       diamonds = 0
     )
-  
+
+  def __str__(self):
+    return f'{self.student}'
+
   class Meta:
     verbose_name = 'Баланс'
     verbose_name_plural = 'Балансы'

@@ -8,7 +8,7 @@ class DetailedHomeworkSerializer(RelatedSerializer, HomeworkSerializer, CanEditS
   specific_lesson = SpecificLessonSerializer()
   note = NoteNameSerializer(read_only=True, allow_null=True)
   student = StudentSerializer(read_only=True)
-  
+
   class Meta(HomeworkSerializer.Meta):
     fields = HomeworkSerializer.Meta.fields + ['can_edit', 'specific_lesson', 'note']
     nested_fields = {

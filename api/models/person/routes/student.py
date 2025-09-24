@@ -6,12 +6,12 @@ class StudentRoutes:
   @property
   def school(self):
     return self.klass.school if self.klass else None
-  
+
   @property
   def klass_link(self):
     if self.klass:
       return f'schools/{self.klass.school.slug}/klasses/{self.klass.slug}'
-  
+
   @property
   def school_link(self):
     if self.school:

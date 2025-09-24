@@ -15,7 +15,7 @@ class GroupAdmin(admin.ModelAdmin):
 @admin.register(models.Klass)
 class KlassAdmin(admin.ModelAdmin):
   inlines = [GroupInline, StudentInline, LessonInline]
-  
+
 @admin.register(models.Position)
 class PositionAdmin(admin.ModelAdmin):
   pass

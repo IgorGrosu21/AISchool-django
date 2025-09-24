@@ -10,7 +10,7 @@ from ..media import DetailedMediaView
 class SchoolPhotoView(DetailedMediaView):
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
   container_field = 'school'
-  
+
   def get_container(self):
     school_slug = self.kwargs.get('school_slug')
     school = get_object_or_404(School, slug=school_slug)

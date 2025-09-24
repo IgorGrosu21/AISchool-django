@@ -13,7 +13,7 @@ class KlassNameSerializer(CreatableSerializer, RelatedSerializer):
 class KlassNameWithGroupsSerializer(KlassNameSerializer):
   students = StudentNameSerializer(many=True, read_only=True)
   groups = GroupNameSerializer(many=True)
-  
+
   class Meta(KlassNameSerializer.Meta):
     fields = KlassNameSerializer.Meta.fields + ['groups', 'students']
     nested_fields = {

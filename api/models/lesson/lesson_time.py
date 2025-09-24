@@ -10,12 +10,12 @@ class LessonTime(WithUUID):
   ending = models.TimeField('Конец')
   order = models.SmallIntegerField('Порядок')
   weekday = models.CharField('День недели', max_length=2, choices=WEEKDAYS)
-  
+
   lessons: models.Manager
-  
+
   def __str__(self):
     return f'{self.school}, начало в {self.starting} ({self.weekday})'
-  
+
   class Meta:
     ordering = ['school', 'weekday', 'order']
     verbose_name = 'Время урока'

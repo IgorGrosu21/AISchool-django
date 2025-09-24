@@ -11,21 +11,21 @@ class Homework(WithFiles):
   comment = models.CharField('Комментарий', max_length=256, blank=True)
   last_modified = models.DateTimeField('Время', auto_now=True)
   links = models.TextField('Ссылки', blank=True)
-  
-  @property
-  def allowed_to_edit(self):
-    return {self.student.user.id}, True
-  
-  def __str__(self):
-    return f'{self.student} на {self.specific_lesson}'
-  
+
   @property
   def note(self):
     note_qs: 'models.QuerySet' = self.specific_lesson.notes.filter(student=self.student)
     if note_qs.exists():
       return note_qs.first()
     return None
-  
+
+  @property
+  def allowed_to_edit(self):
+    return {self.student.user.id}, True
+
+  def __str__(self):
+    return f'{self.student} на {self.specific_lesson}'
+
   class Meta:
     verbose_name = 'Домашнее задание'
     verbose_name_plural = 'Домашние задания'

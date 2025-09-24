@@ -9,7 +9,7 @@ def is_authenticated(func):
     if request.user == None or request.user.is_anonymous:
       return False
     return func(self, request, *args, **kwargs)
-  
+
   return wrapped
 
 def is_authenticated_and_safe_readonly(func):
@@ -20,5 +20,5 @@ def is_authenticated_and_safe_readonly(func):
     if request.method in permissions.SAFE_METHODS:
       return True
     return func(self, request, *args, **kwargs)
-  
+
   return wrapped

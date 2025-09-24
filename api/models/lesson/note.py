@@ -30,21 +30,21 @@ class Note(WithUUID):
   student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='notes', verbose_name='Ученик')
   comment = models.CharField('Комментарий', max_length=256, blank=True, default='')
   last_modified = models.DateTimeField('Время', auto_now=True)
-  
-  def __str__(self):
-    return f'{self.value} для {self.student} по {self.specific_lesson}'
-  
-  @property
-  def allowed_to_edit(self):
-    return {self.specific_lesson.lesson.teacher.user.id}, True
-  
+
   @property
   def homework(self):
     homework_qs: 'models.QuerySet' = self.specific_lesson.homeworks.filter(student=self.student)
     if homework_qs.exists():
       return homework_qs.first()
     return None
-  
+
+  @property
+  def allowed_to_edit(self):
+    return {self.specific_lesson.lesson.teacher.user.id}, True
+
+  def __str__(self):
+    return f'{self.value} для {self.student} по {self.specific_lesson}'
+
   class Meta:
     verbose_name = 'Оценка'
     verbose_name_plural = 'Оценки'

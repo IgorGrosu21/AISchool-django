@@ -12,26 +12,26 @@ from api.serializers import LessonSerializer, StudentSerializer, DetailedSpecifi
 @extend_schema(tags=['api / lesson'])
 class SpecificLessonNamesView(generics.ListAPIView):
   queryset = SpecificLesson.objects.all()
-  
+
   def get_serializer_class(self):
     if self.request.user.is_anonymous:
       return SpecificLessonNameSerializer
-  
+
     account_type = self.get_account_type()
     if account_type == 'student':
       return SpecificLessonWithHomeworkSerializer
     return SpecificLessonNameSerializer
-  
+
   def get_school(self) -> School:
     return get_object_or_404(School, slug=self.request.query_params.get('school'))
-  
+
   def get_account_type(self) -> str:
     account_type = self.kwargs.get('account_type', '')
     allowed_types = ['teacher', 'student']
     if account_type in allowed_types:
       return account_type
     raise exceptions.ParseError(code='invalid_account_type')
-  
+
   def get_person(self):
     account_type = self.get_account_type()
     pk = self.kwargs.get('person_pk')
@@ -39,7 +39,7 @@ class SpecificLessonNamesView(generics.ListAPIView):
     if account_type == 'student':
       model = Student
     return get_object_or_404(model, pk=pk)
-  
+
   def get_queryset(self):
     start_str, end_str = self.kwargs.get('date_range').split('-')
     start_date = datetime.strptime(start_str, '%Y.%m.%d').date()
@@ -58,14 +58,14 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
   permission_classes = [IsKlassManagerOrReadonly|IsTeacherOrReadonly, CanEditSpecificLesson]
   queryset = SpecificLesson.objects.all()
   serializer_class = DetailedSpecificLessonSerializer
-  
+
   def get_lesson(self):
     klass: Klass = get_object_or_404(Klass, school__slug=self.kwargs.get('school_slug'), slug=self.kwargs.get('klass_slug'))
     return get_object_or_404(Lesson, klass__id=klass.id, id=self.kwargs.get('lesson_pk'))
-  
+
   def get_date(self):
     return datetime.strptime(self.kwargs.get('date'), '%Y.%m.%d').date()
-  
+
   def get_object(self):
     try:
       specific_lesson = SpecificLesson.objects.get(lesson=self.get_lesson(), date=self.get_date())
@@ -73,7 +73,7 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
       specific_lesson = None
     self.check_object_permissions(self.request, specific_lesson)
     return specific_lesson
-  
+
   def get(self, request: Request, *args, **kwargs):
     instance = self.get_object()
     if instance:
@@ -94,7 +94,7 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
       'is_student': request.user.user.is_student
     }
     return Response(data, status=status.HTTP_200_OK)
-  
+
   def put(self, request: Request, *args, **kwargs):
     instance = self.get_object()
     if instance:
@@ -108,7 +108,7 @@ class DetailedSpecificLessonView(generics.RetrieveUpdateDestroyAPIView, mixins.C
       setattr(self.request, 'data', {'notes': raw_notes})
       return self.partial_update(self.request)
     return response
-  
+
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
     pass

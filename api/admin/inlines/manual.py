@@ -5,7 +5,7 @@ from api.models import ManualModels as models
 class ManualInline(admin.TabularInline):
   model = models.Manual
   extra = 0
-  
+
 class ModuleInline(admin.TabularInline):
   model = models.Module
   extra = 0
@@ -17,7 +17,7 @@ class TopicInline(admin.TabularInline):
 class TaskInline(admin.TabularInline):
   model = models.Task
   extra = 0
-  
+
 class TheoryInline(admin.TabularInline):
   model = models.Theory
   extra = 0

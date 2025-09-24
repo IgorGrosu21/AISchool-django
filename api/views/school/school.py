@@ -12,7 +12,7 @@ from ..media import MediaView
 class SchoolNamesView(generics.ListAPIView):
   queryset = School.objects.only('id', 'name')
   serializer_class = SchoolNameSerializer
-  
+
   def get_queryset(self):
     return self.queryset.filter(city=self.request.user.user.city)
 
@@ -35,7 +35,7 @@ class SchoolKlassesView(generics.RetrieveUpdateAPIView):
   serializer_class = SchoolWithKlassesSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
   lookup_field = 'slug'
-  
+
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
     pass
@@ -46,18 +46,18 @@ class SchoolTimetableView(generics.RetrieveUpdateAPIView):
   serializer_class = SchoolWithTimetableSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
   lookup_field = 'slug'
-  
+
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
     pass
-  
+
 @extend_schema(tags=['api / school'])
 class SchoolLessonTimesView(generics.RetrieveAPIView):
   queryset = School.objects.all()
   serializer_class = SchoolNameWithTimeTableSerializer
   permission_classes = [IsSchoolManagerOrReadonly, CanEditSchool]
   lookup_field = 'slug'
-  
+
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
     pass

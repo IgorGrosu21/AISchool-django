@@ -8,7 +8,7 @@ from .utils import is_authenticated_and_safe_readonly
 class CanCreateUser(permissions.BasePermission):
   code = 'user_already_exists'
   message = 'User already exists.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     if request.method == 'POST':

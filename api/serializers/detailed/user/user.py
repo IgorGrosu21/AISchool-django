@@ -6,7 +6,7 @@ from ..._helpers import RelatedSerializer
 class DetailedUserSerializer(UserSerializer, RelatedSerializer, CanEditSerializer):
   socials = SocialSerializer(many=True)
   city = CitySerializer()
-  
+
   class Meta(UserSerializer.Meta):
     fields = UserSerializer.Meta.fields + ['socials', 'city', 'lang', 'can_edit']
     nested_fields = {
@@ -17,7 +17,7 @@ class DetailedUserSerializer(UserSerializer, RelatedSerializer, CanEditSerialize
         'socials': 'mutate'
       }
     }
-    
+
 class UserRoutesSerializer(UserSerializer):
   class Meta(UserSerializer.Meta):
     fields = UserSerializer.Meta.fields + ['is_account_verified', 'klass_link', 'school_link', 'diary_link', 'journal_link']

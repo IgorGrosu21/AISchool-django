@@ -8,6 +8,6 @@ from api.serializers import CountryNameSerializer
 class CountryNamesView(generics.ListAPIView):
   authentication_classes = []
   permission_classes = []
-  
+
   queryset = Country.objects.all()
   serializer_class = CountryNameSerializer

@@ -11,7 +11,7 @@ class DetailedTaskView(APIView):
   queryset = Task.objects.all()
   serializer_class = ProgressSerializer
   permission_classes = [IsStudent]
-  
+
   @extend_schema(request=None)
   def post(self, request, manual_slug, module_slug, topic_slug, slug, *args, **kwargs):
     user: User = request.user.user

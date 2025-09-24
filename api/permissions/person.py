@@ -8,7 +8,7 @@ from .utils import is_authenticated, is_authenticated_and_safe_readonly
 class IsSelf(permissions.BasePermission):
   code = 'private_view'
   message = 'Only the user himself can access this info.'
-  
+
   @is_authenticated
   def has_object_permission(self, request: Request, view, obj: Person):
     user: User = request.user.user
@@ -17,7 +17,7 @@ class IsSelf(permissions.BasePermission):
 class IsSelfOrReadonly(permissions.BasePermission):
   code = 'private_edit'
   message = 'Only the user himself can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_object_permission(self, request: Request, view, obj: Person):
     user: User = request.user.user
@@ -26,7 +26,7 @@ class IsSelfOrReadonly(permissions.BasePermission):
 class IsParent(permissions.BasePermission):
   code = 'parent_view'
   message = 'Only the parent can access this info.'
-  
+
   @is_authenticated
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -35,7 +35,7 @@ class IsParent(permissions.BasePermission):
 class IsParentOrReadonly(permissions.BasePermission):
   code = 'parent_edit'
   message = 'Only the parent can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -44,7 +44,7 @@ class IsParentOrReadonly(permissions.BasePermission):
 class IsStudent(permissions.BasePermission):
   code = 'student_view'
   message = 'Only the student can access this info.'
-  
+
   @is_authenticated
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -53,7 +53,7 @@ class IsStudent(permissions.BasePermission):
 class IsStudentOrReadonly(permissions.BasePermission):
   code = 'student_edit'
   message = 'Only the student can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -62,7 +62,7 @@ class IsStudentOrReadonly(permissions.BasePermission):
 class IsKlassManager(permissions.BasePermission):
   code = 'klass_manager_view'
   message = 'Only the klass manager can access this info.'
-  
+
   @is_authenticated
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -73,7 +73,7 @@ class IsKlassManager(permissions.BasePermission):
 class IsKlassManagerOrReadonly(permissions.BasePermission):
   code = 'klass_manager_edit'
   message = 'Only the klass manager can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -84,7 +84,7 @@ class IsKlassManagerOrReadonly(permissions.BasePermission):
 class IsTeacher(permissions.BasePermission):
   code = 'teacher_view'
   message = 'Only the teacher can access this info.'
-  
+
   @is_authenticated
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -93,7 +93,7 @@ class IsTeacher(permissions.BasePermission):
 class IsTeacherOrReadonly(permissions.BasePermission):
   code = 'teacher_edit'
   message = 'Only the teacher can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -102,7 +102,7 @@ class IsTeacherOrReadonly(permissions.BasePermission):
 class IsSchoolManager(permissions.BasePermission):
   code = 'school_manager_view'
   message = 'Only the school manager can access this info.'
-  
+
   @is_authenticated
   def has_permission(self, request: Request, view):
     user: User = request.user.user
@@ -113,7 +113,7 @@ class IsSchoolManager(permissions.BasePermission):
 class IsSchoolManagerOrReadonly(permissions.BasePermission):
   code = 'school_manager_edit'
   message = 'Only the school manager can edit this info.'
-  
+
   @is_authenticated_and_safe_readonly
   def has_permission(self, request: Request, view):
     user: User = request.user.user

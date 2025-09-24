@@ -13,7 +13,7 @@ class TopicInline(admin.TabularInline):
 class TaskInline(admin.TabularInline):
   model = models.Task
   extra = 0
-  
+
 class TheoryInline(admin.TabularInline):
   model = models.Theory
   extra = 0

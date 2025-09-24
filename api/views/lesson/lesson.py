@@ -9,7 +9,7 @@ from api.serializers import LessonNameSerializer
 class LessonNamesView(generics.ListAPIView):
   queryset = Lesson.objects.all()
   serializer_class = LessonNameSerializer
-  
+
   def get_queryset(self):
     account_type = self.kwargs.get('account_type')
     school = None

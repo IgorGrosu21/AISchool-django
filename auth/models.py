@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class AuthUserManager(BaseUserManager):
   model: type['AuthUser']
-  
+
   def create_user(self, email, password, **extra_fields):
     email = self.normalize_email(email)
     user = self.model(email=email, **extra_fields)
@@ -32,7 +32,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 
   USERNAME_FIELD = 'email'
   REQUIRED_FIELDS = []
-  
+
   class Meta:
     verbose_name = 'Пользователь'
     verbose_name_plural = 'Пользователи'

@@ -8,7 +8,7 @@ from .inlines import SubjectInline, ManualInline
 class SubjectTypeAdmin(admin.ModelAdmin):
   list_filter = ['country', 'name']
   inlines = [SubjectInline]
-  
+
 @admin.register(models.Subject)
 class SubjectAdmin(admin.ModelAdmin):
   list_filter = ['type__country', 'type__name', 'lang']

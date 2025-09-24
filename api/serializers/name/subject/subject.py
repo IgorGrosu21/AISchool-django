@@ -10,7 +10,7 @@ class SubjectNameSerializer(RetrieveableSerializer):
       'verbose_name': {'read_only': True},
       'slug': {'read_only': True}
     }
-    
+
 class SubjectNameWithNotesSerializer(SubjectNameSerializer):
   class Meta(SubjectNameSerializer.Meta):
     fields = SubjectNameSerializer.Meta.fields + ['has_notes']

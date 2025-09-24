@@ -9,11 +9,11 @@ class HomeworkPhotoInline(admin.TabularInline):
 class HomeworkInline(admin.TabularInline):
   model = models.Homework
   extra = 0
-  
+
 class LessonInline(admin.TabularInline):
   model = models.Lesson
   extra = 0
-  
+
 class NoteInline(admin.TabularInline):
   model = models.Note
   extra = 0

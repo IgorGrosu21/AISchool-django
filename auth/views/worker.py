@@ -6,6 +6,6 @@ from drf_spectacular.utils import extend_schema
 class WorkerView(APIView):
   authentication_classes = []
   permission_classes = []
-  
+
   def get(self, request):
     return Response()

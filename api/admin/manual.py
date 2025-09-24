@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from api.models import ManualModels as models
-  
+
 from .inlines import ModuleInline, TopicInline, TaskInline, TheoryInline
 
 @admin.register(models.Balance)
@@ -16,7 +16,7 @@ class ManualAdmin(admin.ModelAdmin):
 @admin.register(models.Module)
 class ModuleAdmin(admin.ModelAdmin):
   inlines = [TopicInline]
-  
+
 @admin.register(models.Task)
 class TaskAdmin(admin.ModelAdmin):
   pass

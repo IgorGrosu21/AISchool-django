@@ -8,13 +8,13 @@ def extract_id(validated_data: dict) -> str:
   return validated_data.get('id', '')
 
 def extract_ids(validated_data_list: list[dict]) -> list[str]:
-  return [entry.get('id') for entry in validated_data_list if entry.get('id', '') != '']
+  return [entry.get('id') for entry in validated_data_list if entry.get('id', '')]
 
 
 def replace_with_id(validated_data: dict | str):
   if isinstance(validated_data, str):
     return validated_data
-  
+
   for key, value in validated_data.items():
     if isinstance(value, Model):
       validated_data[key] = value.id
@@ -34,33 +34,32 @@ def retrieve(validated_data: dict | list[dict], serializer_class: type[ModelSeri
 
 
 def mutate(existing: Model | QuerySet | None, validated_data: dict | list[dict], serializer_class: type[ModelSerializer], context: dict):
-  serializer_class_with_context = lambda *args, **kwargs: serializer_class(*args, **kwargs, context=context)
-  
   if isinstance(validated_data, list):
-    return mutate_many(existing, validated_data, serializer_class_with_context)
+    return mutate_many(existing, validated_data, serializer_class, context)
+
   if not existing:
     validated_data.pop('id', None)
-  return mutate_one(existing, validated_data, serializer_class_with_context)
+  return mutate_one(existing, validated_data, serializer_class, context)
 
-def mutate_one(existing: Model | None, validated_data: dict, serializer_class: type[ModelSerializer]):
+def mutate_one(existing: Model | None, validated_data: dict, serializer_class: type[ModelSerializer], context: dict):
   validated_data = replace_with_id(validated_data)
-  serializer = serializer_class(existing, data=validated_data)
+  serializer = serializer_class(existing, data=validated_data, context=context)
   serializer.is_valid(raise_exception=True)
   return serializer.save()
 
-def mutate_many(existing_qs: QuerySet, validated_data_list: list[dict], serializer_class: type[ModelSerializer]):
+def mutate_many(existing_qs: QuerySet, validated_data_list: list[dict], serializer_class: type[ModelSerializer], context: dict):
   incoming_ids = extract_ids(validated_data_list)
   existing_qs.exclude(id__in=incoming_ids).delete()
-  
+
   existing_ids = {str(entry.id): entry for entry in existing_qs}
-  
+
   instances = []
   for entry in validated_data_list:
     entry_id = str(entry.get('id', '')).strip()
 
     if entry_id and entry_id in existing_ids:
       existing = existing_ids[entry_id]
-      instances.append(mutate_one(existing, entry, serializer_class))
+      instances.append(mutate_one(existing, entry, serializer_class, context))
       continue
     entry.pop('id', None)
-    instances.append(mutate_one(None, entry, serializer_class))
+    instances.append(mutate_one(None, entry, serializer_class, context))

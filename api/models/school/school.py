@@ -1,12 +1,13 @@
 from django.db import models
 
+from ..person.teacher import Teacher
 from ..country.city import City
 from ..media import Media, WithFiles
 from ..subject.subject import Subject
 
 class School(WithFiles):
   name = models.CharField('Название', max_length=64)
-  teachers = models.ManyToManyField('Teacher', through='Position', verbose_name='Позиции', related_name='schools')
+  teachers = models.ManyToManyField(Teacher, through='Position', verbose_name='Позиции', related_name='schools')
   city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, verbose_name='Город', related_name='schools')
   address = models.CharField('Адрес', max_length=64)
   lang = models.CharField('Язык', blank=True, max_length=2)
@@ -21,19 +22,19 @@ class School(WithFiles):
   work_hours = models.CharField('Часы работы', max_length=16, blank=True)
   slug = models.SlugField('Слаг', max_length=64, db_index=True)
   subjects = models.ManyToManyField(Subject, related_name='schools', verbose_name='Предметы')
-  
+
   timetable: models.Manager
   klasses: models.Manager
   staff: models.Manager
-  
+
   @property
   def holidays(self):
     return self.city.holidays.split(';') if self.city else []
-  
+
   @property
   def preview(self):
     return self.files.filter(is_preview=True).first()
-  
+
   @preview.setter
   def preview(self, file):
     preview_qs = self.files.filter(is_preview=True)
@@ -43,26 +44,26 @@ class School(WithFiles):
       preview.save()
     else:
       self.files.create(is_preview=True, file=file, school=self)
-  
+
   @property
   def managers(self):
     return self.staff.filter(is_manager=True)
-  
+
   @property
   def head_master(self):
     return self.staff.filter(type='HM').first()
-  
+
   @property
   def head_teachers(self):
     return self.staff.filter(type='HT')
-  
+
   @property
   def allowed_to_edit(self):
     return set(self.managers.values_list('teacher__user__id', flat=True)), True
-  
+
   def __str__(self):
     return self.name
-  
+
   class Meta:
     verbose_name = 'Школа'
     verbose_name_plural = 'Школы'

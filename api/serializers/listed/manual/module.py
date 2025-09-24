@@ -8,16 +8,16 @@ from .balance import BalanceSerializer
 
 class ModuleWithManualSerializer(ModelSerializer):
   manual = ManualSerializer()
-  
+
   class Meta:
     fields = ['name', 'manual', 'slug']
     model = Module
-  
+
 
 class ModuleSerializer(ModuleWithManualSerializer):
   manual = None
   topics = TopicSerializer(many=True)
   balance = BalanceSerializer()
-  
+
   class Meta(ModuleWithManualSerializer.Meta):
     fields = ['name', 'topics', 'balance', 'slug']

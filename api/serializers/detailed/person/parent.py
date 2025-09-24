@@ -4,7 +4,7 @@ from .student import StudentHomeSerializer
 
 class DetailedParentSerializer(DetailedPersonSerializer, ParentSerializer):
   students = StudentWithKlassSerializer(many=True)
-  
+
   class Meta(ParentSerializer.Meta):
     fields = ParentSerializer.Meta.fields + ['students']
     nested_fields = {
@@ -15,9 +15,9 @@ class DetailedParentSerializer(DetailedPersonSerializer, ParentSerializer):
         'students': 'retrieve'
       }
     }
-    
+
 class ParentHomeSerializer(PersonHomeSerializer):
   students = StudentHomeSerializer(many=True, read_only=True)
-  
+
   class Meta(ParentSerializer.Meta):
     fields = PersonHomeSerializer.Meta.fields + ['students']

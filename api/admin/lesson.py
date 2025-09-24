@@ -7,7 +7,7 @@ from .inlines import HomeworkPhotoInline, LessonInline, SpecificLessonInline, Sp
 @admin.register(models.Homework)
 class HomeworkAdmin(admin.ModelAdmin):
   inlines = [HomeworkPhotoInline]
-  
+
 @admin.register(models.LessonTime)
 class LessonTimeAdmin(admin.ModelAdmin):
   inlines = [LessonInline]

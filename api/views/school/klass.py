@@ -11,7 +11,7 @@ from api.serializers import KlassSerializer, DetailedKlassSerializer
 class TeacherKlasses(generics.ListAPIView):
   queryset = Klass.objects.all()
   serializer_class = KlassSerializer
-  
+
   def get_queryset(self):
     school_slug, teacher_pk = self.kwargs.get('school_slug'), self.kwargs.get('teacher_pk')
     school = get_object_or_404(School, slug=school_slug)
@@ -26,14 +26,14 @@ class DetailedKlassView(generics.RetrieveUpdateAPIView):
   queryset = Klass.objects.all()
   serializer_class = DetailedKlassSerializer
   permission_classes = [IsTeacherOrReadonly, CanEditKlass]
-  
+
   def get_object(self):
     school_slug, slug = self.kwargs.get('school_slug'), self.kwargs.get('slug')
     school = get_object_or_404(School, slug=school_slug)
     klass = get_object_or_404(Klass, slug=slug, school=school)
     self.check_object_permissions(self.request, klass)
     return klass
-  
+
   @extend_schema(exclude=True)
   def patch(self, request, *args, **kwargs):
     pass

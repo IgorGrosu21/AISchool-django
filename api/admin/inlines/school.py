@@ -13,7 +13,7 @@ class KlassInline(admin.TabularInline):
 class SchoolPhotoInline(admin.TabularInline):
   model = models.SchoolPhoto
   extra = 0
-  
+
 class PositionInline(admin.TabularInline):
   model = models.Position
   extra = 0

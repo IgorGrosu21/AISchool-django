@@ -9,7 +9,7 @@ from api.serializers import DetailedModuleSerializer
 class DetailedModuleView(generics.RetrieveAPIView):
   queryset = Module.objects.all()
   serializer_class = DetailedModuleSerializer
-  
+
   def get_object(self):
     kwargs = {
       'manual__slug': self.kwargs.get('manual_slug'),

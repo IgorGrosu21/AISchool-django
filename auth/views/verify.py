@@ -47,7 +47,7 @@ class VerifyDetailedUserView(APIView):
   authentication_classes = []
   permission_classes = []
   throttle_classes = [AnonRateThrottle]
-  
+
   @extend_schema(tags=['auth / verify'], request=None, responses={
     status.HTTP_204_NO_CONTENT: None
   })
@@ -57,8 +57,8 @@ class VerifyDetailedUserView(APIView):
 
     try:
       user = AuthUser.objects.get(pk=pk)
-    except AuthUser.DoesNotExist:
-      raise NotFound(code='user_doesn\'t_exist')
+    except AuthUser.DoesNotExist as e:
+      raise NotFound(code='user_doesn\'t_exist') from e
 
     if default_token_generator.check_token(user, token):
       user.is_verified = True

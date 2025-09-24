@@ -6,7 +6,7 @@ from .analytics import StudentAnalyticsSerializer
 
 class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
   klass = KlassSerializer()
-  
+
   class Meta(StudentSerializer.Meta):
     fields = StudentSerializer.Meta.fields + ['klass']
     nested_fields = {
@@ -15,7 +15,7 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
         'klass': 'retrieve'
       },
     }
-  
+
   def update(self, instance: Student, validated_data: dict):
     klass_data = validated_data['klass']
     params = {
@@ -34,11 +34,11 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
       instance.balance = Balance.objects.create()
       instance.save()
     return instance
-    
+
 class StudentHomeSerializer(PersonHomeSerializer):
   latest_notes = NoteSerializer(many=True, read_only=True)
   latest_specific_lessons = SpecificLessonSerializer(many=True, read_only=True)
   analytics = StudentAnalyticsSerializer(many=True, read_only=True)
-  
+
   class Meta(StudentSerializer.Meta):
     fields = PersonHomeSerializer.Meta.fields + ['latest_notes', 'latest_specific_lessons', 'analytics']

@@ -9,7 +9,7 @@ class GroupNameSerializer(RelatedSerializer, CreatableSerializer):
   subject = SubjectNameSerializer()
   teacher = TeacherNameSerializer(required=False, allow_null=True)
   students = StudentNameSerializer(many=True)
-  
+
   class Meta:
     fields = ['id', 'order', 'klass', 'subject', 'teacher', 'students']
     model = Group

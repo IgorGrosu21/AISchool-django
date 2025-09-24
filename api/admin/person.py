@@ -3,7 +3,7 @@ from django.contrib import admin
 from api.models import PersonModels as models
 
 from .inlines import (
-  ParentStudentInline, 
+  ParentStudentInline,
   HomeworkInline, NoteInline, StudentGroupInline,
   TeacherSubjectInline, LessonInline, PositionInline, GroupInline)
 

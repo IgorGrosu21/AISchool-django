@@ -12,10 +12,10 @@ class Social(WithUUID):
   type = models.CharField('Соц. сеть', max_length=2, choices=TYPES)
   link = models.URLField('Ссылка')
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='socials', verbose_name='Пользователь')
-  
+
+  def __str__(self):
+    return self.link
+
   class Meta:
     verbose_name = 'Ссылка на соц. сеть'
     verbose_name_plural = 'Ссылки на соц. сети'
-  
-  def __str__(self):
-    return self.link

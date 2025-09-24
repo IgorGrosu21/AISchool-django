@@ -15,17 +15,17 @@ USER_TYPE_MAPPING: dict[str, BaseManager[Person]] = {
   'student': Student.objects,
   'teacher': Teacher.objects
 }
-    
+
 @extend_schema(tags=['api / user'])
 class DetailedUserView(RetrieveModelMixin, CreateModelMixin, MediaView):
   queryset = User.objects.all()
   serializer_class = DetailedUserSerializer
   media_field = 'avatar'
   permission_classes = [CanCreateUser]
-  
+
   def get_object(self) -> User:
     return self.request.user.user
-  
+
   def get(self, request, *args, **kwargs):
     return self.retrieve(request, *args, **kwargs)
 
@@ -45,6 +45,6 @@ class UserRoutesView(generics.RetrieveAPIView):
   queryset = User.objects.all()
   serializer_class = UserRoutesSerializer
   permission_classes = [IsSelf]
-  
+
   def get_object(self) -> User:
     return self.request.user.user
