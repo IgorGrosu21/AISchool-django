@@ -23,6 +23,6 @@ class DetailedTeacherSerializer(DetailedPersonSerializer, TeacherSerializer):
     }
 
 class TeacherHomeSerializer(PersonHomeSerializer):
-  latest_homeworks = DetailedHomeworkSerializer(many=True, read_only=True)
   tomorrow_timetable = TomorrowTimetableSerializer(many=True, read_only=True)
+  latest_homeworks = DetailedHomeworkSerializer(many=True, read_only=True)
   analytics = TeacherAnalyticsSerializer(many=True, read_only=True)

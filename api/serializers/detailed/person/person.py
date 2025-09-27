@@ -1,6 +1,5 @@
 from rest_framework.serializers import Serializer, UUIDField, CharField
 
-
 from ..can_edit import CanEditSerializer
 from ..user import DetailedUserSerializer
 from ...listed import UserSerializer

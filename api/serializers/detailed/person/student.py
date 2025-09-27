@@ -1,7 +1,8 @@
 from api.models import Balance, Klass, Student
 
-from ...listed import KlassSerializer, StudentSerializer, NoteSerializer, SpecificLessonSerializer
+from ...listed import KlassSerializer, StudentSerializer, NoteSerializer
 from .person import DetailedPersonSerializer, PersonHomeSerializer
+from .timetable import TomorrowTimetableSerializer
 from .analytics import StudentAnalyticsSerializer
 
 class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
@@ -36,6 +37,6 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
     return instance
 
 class StudentHomeSerializer(PersonHomeSerializer):
+  tomorrow_timetable = TomorrowTimetableSerializer(many=True, read_only=True)
   latest_notes = NoteSerializer(many=True, read_only=True)
-  latest_specific_lessons = SpecificLessonSerializer(many=True, read_only=True)
   analytics = StudentAnalyticsSerializer(many=True, read_only=True)

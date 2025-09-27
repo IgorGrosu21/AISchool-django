@@ -7,44 +7,50 @@ from api.models import Teacher, Homework, Note
 def teacher_with_data(teacher: Teacher):
   lesson_ids = list(teacher.lessons.values_list('id', flat=True))
 
+  school = teacher.schools.select_related().prefetch_related(
+    'timetable',
+    'klasses__lessons__teacher'
+  ).first()
+
+  if school:
+    teacher.tomorrow_timetable = []
+    lesson_times = school.timetable.none()
+    tomorrow = timezone.now().date()
+    while not lesson_times.count():
+      tomorrow += timedelta(days=1)
+      tomorrow_weekday = 'TU'#tomorrow.strftime('%A')[:2].upper()
+
+      lesson_times = school.timetable.filter(weekday=tomorrow_weekday).order_by('order')
+    teacher_lessons_by_time = {}
+
+    for lesson in teacher.lessons.select_related('subject', 'klass').prefetch_related('specific_lessons').filter(lesson_time__in=lesson_times):
+      time_id = lesson.lesson_time.id
+      teacher_lessons_by_time[time_id] = lesson
+
+    for lesson_time in lesson_times:
+      lesson = teacher_lessons_by_time.get(lesson_time.id, None)
+      specific_lesson = None
+      if lesson:
+        specific_lesson = lesson.specific_lessons.filter(date=tomorrow).first()
+      teacher.tomorrow_timetable.append({
+        'id': lesson_time.id,
+        'starting': lesson_time.starting,
+        'ending': lesson_time.ending,
+        'weekday': lesson_time.weekday,
+        'order': lesson_time.order,
+        'school': school.slug,
+        'lesson': lesson,
+        'specific_lesson': specific_lesson
+      })
+
+
+
   teacher.latest_homeworks = list(
     Homework.objects
     .select_related('specific_lesson__lesson__subject', 'student')
     .filter(specific_lesson__lesson_id__in=lesson_ids)
     .order_by('-last_modified')[:4]
   )
-
-
-
-  school = teacher.schools.select_related().prefetch_related(
-    'timetable',
-    'klasses__lessons__teacher'
-  ).first()
-
-  if not school:
-    teacher.tomorrow_timetable = []
-  else:
-    tomorrow = timezone.now().date() + timedelta(days=1)
-    tomorrow_weekday = tomorrow.strftime('%A')[:2].upper()
-
-    lesson_times = school.timetable.filter(weekday=tomorrow_weekday).order_by('order')
-    teacher_lessons_by_time = {}
-
-    for lesson in teacher.lessons.select_related('subject', 'klass').filter(lesson_time__in=lesson_times):
-      time_id = lesson.lesson_time.id
-      if time_id not in teacher_lessons_by_time:
-        teacher_lessons_by_time[time_id] = []
-      teacher_lessons_by_time[time_id].append(lesson)
-
-    teacher.tomorrow_timetable = [{
-      'id': lesson_time.id,
-      'starting': lesson_time.starting,
-      'ending': lesson_time.ending,
-      'weekday': lesson_time.weekday,
-      'order': lesson_time.order,
-      'school': school.slug,
-      'lessons': teacher_lessons_by_time.get(lesson_time.id, [])
-    } for lesson_time in lesson_times]
 
 
 

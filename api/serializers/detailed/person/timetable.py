@@ -1,6 +1,6 @@
 from rest_framework.serializers import Serializer, UUIDField, TimeField, CharField, IntegerField
 
-from ...name import LessonNameSerializer
+from ...name import LessonNameSerializer, SpecificLessonNameSerializer
 
 class TomorrowTimetableSerializer(Serializer):
   id = UUIDField(read_only=True)
@@ -9,4 +9,5 @@ class TomorrowTimetableSerializer(Serializer):
   weekday = CharField(read_only=True, max_length=2)
   order = IntegerField(read_only=True)
   school = UUIDField(read_only=True)
-  lessons = LessonNameSerializer(many=True, read_only=True)
+  lesson = LessonNameSerializer(read_only=True)
+  specific_lesson = SpecificLessonNameSerializer(read_only=True)
