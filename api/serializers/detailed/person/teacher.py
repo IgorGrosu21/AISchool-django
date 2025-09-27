@@ -10,7 +10,7 @@ class DetailedTeacherSerializer(DetailedPersonSerializer, TeacherSerializer):
   work_places = PositionSerializer(many=True)
 
   class Meta(TeacherSerializer.Meta):
-    fields = TeacherSerializer.Meta.fields + ['user', 'experience', 'subjects', 'work_places']
+    fields = TeacherSerializer.Meta.fields + ['user', 'experience', 'subjects', 'work_places', 'can_edit']
     nested_fields = {
       'one': {
         **TeacherSerializer.Meta.nested_fields.get('one', {}),

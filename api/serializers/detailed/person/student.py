@@ -8,7 +8,7 @@ class DetailedStudentSerializer(DetailedPersonSerializer, StudentSerializer):
   klass = KlassSerializer()
 
   class Meta(StudentSerializer.Meta):
-    fields = StudentSerializer.Meta.fields + ['klass']
+    fields = StudentSerializer.Meta.fields + ['klass', 'can_edit']
     nested_fields = {
       'one': {
         **StudentSerializer.Meta.nested_fields.get('one', {}),

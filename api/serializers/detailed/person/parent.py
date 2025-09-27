@@ -6,7 +6,7 @@ class DetailedParentSerializer(DetailedPersonSerializer, ParentSerializer):
   students = StudentWithKlassSerializer(many=True)
 
   class Meta(ParentSerializer.Meta):
-    fields = ParentSerializer.Meta.fields + ['students']
+    fields = ParentSerializer.Meta.fields + ['students', 'can_edit']
     nested_fields = {
       'one': {
         **ParentSerializer.Meta.nested_fields.get('one', {}),
