@@ -18,7 +18,7 @@ def teacher_with_data(teacher: Teacher):
     tomorrow = timezone.now().date()
     while not lesson_times.count():
       tomorrow += timedelta(days=1)
-      tomorrow_weekday = 'TU'#tomorrow.strftime('%A')[:2].upper()
+      tomorrow_weekday = tomorrow.strftime('%A')[:2].upper()
 
       lesson_times = school.timetable.filter(weekday=tomorrow_weekday).order_by('order')
     teacher_lessons_by_time = {}
