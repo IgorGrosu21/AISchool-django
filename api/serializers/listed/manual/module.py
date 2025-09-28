@@ -1,3 +1,4 @@
+from django.db.models import Model
 from rest_framework.serializers import ModelSerializer
 
 from api.models import Module
@@ -10,14 +11,13 @@ class ModuleWithManualSerializer(ModelSerializer):
   manual = ManualSerializer()
 
   class Meta:
-    fields = ['name', 'manual', 'slug']
+    fields = ['name', 'manual', 'slug', 'start_page', 'end_page']
     model = Module
 
-
-class ModuleSerializer(ModuleWithManualSerializer):
-  manual = None
+class ModuleSerializer(ModelSerializer):
   topics = TopicSerializer(many=True)
   balance = BalanceSerializer()
 
-  class Meta(ModuleWithManualSerializer.Meta):
-    fields = ['name', 'topics', 'balance', 'slug']
+  class Meta:
+    fields = ['name', 'topics', 'balance', 'slug', 'start_page', 'end_page']
+    model = Module

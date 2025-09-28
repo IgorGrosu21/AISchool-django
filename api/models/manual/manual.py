@@ -7,6 +7,7 @@ class Manual(WithUUID):
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Название', related_name='manuals')
   grade = models.SmallIntegerField('Класс', default=5)
   slug = models.SlugField('Слаг', max_length=64, unique=True, db_index=True)
+  pdf_link = models.URLField('Ссылка на PDF')
 
   modules: models.Manager
 

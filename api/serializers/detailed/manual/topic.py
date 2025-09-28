@@ -3,11 +3,10 @@ from rest_framework.serializers import SerializerMethodField
 from api.models import User, Student
 
 from .progress import ProgressSerializer
-from ...listed import TopicSerializer, ModuleWithManualSerializer, TaskSerializer, TheorySerializer
+from ...listed import TopicSerializer, ModuleWithManualSerializer, TaskSerializer
 
 class DetailedTopicSerializer(ProgressSerializer, TopicSerializer):
   module = ModuleWithManualSerializer()
-  theories = TheorySerializer(many=True)
   tasks = TaskSerializer(many=True)
   completed_tasks = SerializerMethodField()
 
@@ -19,4 +18,4 @@ class DetailedTopicSerializer(ProgressSerializer, TopicSerializer):
     return []
 
   class Meta(TopicSerializer.Meta):
-    fields = TopicSerializer.Meta.fields + ['progress', 'module', 'theories', 'tasks', 'completed_tasks']
+    fields = TopicSerializer.Meta.fields + ['progress', 'module', 'tasks', 'completed_tasks']

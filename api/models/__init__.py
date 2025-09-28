@@ -28,7 +28,6 @@ from .manual.balance import Balance
 from .manual.manual import Manual
 from .manual.module import Module
 from .manual.task import Task
-from .manual.theory import Theory
 from .manual.topic import Topic
 
 class ManualModels:
@@ -36,7 +35,6 @@ class ManualModels:
   Manual = Manual
   Module = Module
   Task = Task
-  Theory = Theory
   Topic = Topic
 
 

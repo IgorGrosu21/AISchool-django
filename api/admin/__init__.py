@@ -1,6 +1,6 @@
 from .country import CountryAdmin, RegionAdmin, CityAdmin
 from .lesson import HomeworkAdmin, LessonTimeAdmin, LessonAdmin, NoteAdmin, SpecificLessonAdmin
-from .manual import BalanceAdmin, ManualAdmin, ModuleAdmin, TaskAdmin, TheoryAdmin, TopicAdmin
+from .manual import BalanceAdmin, ManualAdmin, ModuleAdmin, TaskAdmin, TopicAdmin
 from .person import ParentAdmin, StudentAdmin, SubscriptionAdmin, TeacherAdmin
 from .school import GroupAdmin, KlassAdmin, PositionAdmin, SchoolAdmin
 from .user import SocialAdmin, UserAdmin

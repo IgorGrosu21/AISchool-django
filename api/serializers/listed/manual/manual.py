@@ -8,5 +8,5 @@ class ManualSerializer(ModelSerializer):
   subject = SubjectNameSerializer(read_only=True)
 
   class Meta:
-    fields = ['id', 'subject', 'grade', 'slug']
+    fields = ['id', 'subject', 'grade', 'slug', 'pdf_link']
     model = Manual

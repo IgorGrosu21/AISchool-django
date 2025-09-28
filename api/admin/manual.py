@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from api.models import ManualModels as models
 
-from .inlines import ModuleInline, TopicInline, TaskInline, TheoryInline
+from .inlines import ModuleInline, TopicInline, TaskInline
 
 @admin.register(models.Balance)
 class BalanceAdmin(admin.ModelAdmin):
@@ -21,10 +21,6 @@ class ModuleAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
   pass
 
-@admin.register(models.Theory)
-class TheoryAdmin(admin.ModelAdmin):
-  pass
-
 @admin.register(models.Topic)
 class TopicAdmin(admin.ModelAdmin):
-  inlines = [TaskInline, TheoryInline]
+  inlines = [TaskInline]

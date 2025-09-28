@@ -6,7 +6,7 @@ ADMIN_REORDER = (
     'api.HomeworkPhoto', 'api.Homework', 'api.LessonTime', 'api.Lesson', 'api.Note', 'api.SpecificLessonPhoto', 'api.SpecificLesson'
   ) },
   { 'app': 'api', 'label': 'Учебники', 'models': (
-    'api.Balance', 'api.Manual', 'api.Module', 'api.Task', 'api.Theory', 'api.Topic'
+    'api.Balance', 'api.Manual', 'api.Module', 'api.Task', 'api.Topic'
   ) },
   { 'app': 'api', 'label': 'Люди', 'models': (
     'api.Parent', 'api.Student', 'api.Subscription', 'api.Teacher'

@@ -2,9 +2,9 @@ from django.db import models
 
 from .balance import Balance
 from .manual import Manual
-from .with_slug import WithSlug
+from .utils import Paginated
 
-class Module(WithSlug):
+class Module(Paginated):
   manual = models.ForeignKey(Manual, on_delete=models.SET_NULL, null=True, verbose_name='Предмет', related_name='modules')
 
   topics: models.Manager

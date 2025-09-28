@@ -7,5 +7,5 @@ class TopicSerializer(ModelSerializer):
   balance = BalanceSerializer()
 
   class Meta:
-    fields = ['name', 'balance', 'slug']
+    fields = ['name', 'balance', 'slug', 'start_page', 'end_page']
     model = Topic

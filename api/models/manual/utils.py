@@ -12,3 +12,10 @@ class WithSlug(WithUUID):
 
   class Meta:
     abstract = True
+
+class Paginated(WithSlug):
+  start_page = models.SmallIntegerField('Начальная страница')
+  end_page = models.SmallIntegerField('Конечная страница')
+
+  class Meta:
+    abstract = True
